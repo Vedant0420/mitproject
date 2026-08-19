@@ -274,6 +274,7 @@
 
 .nav-role-admin   { color: var(--amber); }
 .nav-role-faculty { color: var(--teal); }
+.nav-role-viewer  { color: var(--teal); }
 
 /* Logout button */
 .nav-logout {

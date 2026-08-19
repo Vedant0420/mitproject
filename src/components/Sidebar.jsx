@@ -11,7 +11,7 @@ import { FLOORS, FLOOR_LABELS } from '../utils/constants.js';
 import './Sidebar.css';
 
 export default function Navbar() {
-  const { currentUser, isAdmin, logout } = useAuth();
+  const { currentUser, isAdmin, isViewer, logout } = useAuth();
   const { theme, toggle }                = useTheme();
   const navigate                         = useNavigate();
   const [floorOpen, setFloorOpen]        = useState(false);
@@ -174,7 +174,7 @@ export default function Navbar() {
             <div className="nav-user-info">
               <span className="nav-user-name">{currentUser?.name}</span>
               <span className={`nav-role-badge nav-role-${currentUser?.role}`}>
-                {currentUser?.role}
+                {currentUser?.role === 'admin' ? 'Admin' : 'Viewer'}
               </span>
             </div>
 

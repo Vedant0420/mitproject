@@ -284,7 +284,7 @@ export default function AdminPanel() {
                             <span className={`badge badge-${room.type}`} style={{ fontSize: '0.68rem' }}>
                               {ROOM_TYPES.find(t => t.value === room.type)?.label}
                             </span>
-                            <span className="arc-cap">👤 {room.capacity}</span>
+                            <span className="arc-cap">{room.capacity}</span>
                           </div>
 
                           {/* Allotments */}

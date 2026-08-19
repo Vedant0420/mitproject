@@ -7,6 +7,7 @@ import Navbar from './components/Sidebar.jsx';
 import ToastContainer from './components/ToastContainer.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import Login from './pages/Login.jsx';
+import Signup from './pages/Signup.jsx';
 import Dashboard from './pages/Dashboard.jsx';
 import FloorMap from './pages/FloorMap.jsx';
 import RoomManagement from './pages/RoomManagement.jsx';
@@ -17,24 +18,22 @@ import AdminPanel from './pages/AdminPanel.jsx';
 import LiveDashboard from './pages/LiveDashboard.jsx';
 
 function AppInner() {
-  const { loadAll } = useApp();
+  const { loadAll }    = useApp();
   const { currentUser } = useAuth();
 
   useEffect(() => { loadAll(); }, [loadAll]);
 
   return (
     <div className="app-layout">
-      {/* Navbar only when logged in */}
       {currentUser && <Navbar />}
 
       <main className="main-content fade-in">
         <Routes>
-          {/* Public */}
-          <Route path="/login" element={
-            currentUser ? <Navigate to="/" replace /> : <Login />
-          } />
+          {/* ── Public auth pages ─────────────────────────────── */}
+          <Route path="/login"  element={currentUser ? <Navigate to="/" replace /> : <Login />} />
+          <Route path="/signup" element={currentUser ? <Navigate to="/" replace /> : <Signup />} />
 
-          {/* Protected — all roles */}
+          {/* ── All authenticated users (admin + viewer) ─────── */}
           <Route path="/" element={
             <ProtectedRoute><Dashboard /></ProtectedRoute>
           } />
@@ -42,17 +41,17 @@ function AppInner() {
             <ProtectedRoute><FloorMap /></ProtectedRoute>
           } />
           <Route path="/floors" element={<Navigate to="/floors/1" replace />} />
+          <Route path="/timetable" element={
+            <ProtectedRoute><Timetable /></ProtectedRoute>
+          } />
           <Route path="/rooms" element={
             <ProtectedRoute><RoomManagement /></ProtectedRoute>
           } />
           <Route path="/allotments" element={
             <ProtectedRoute><Allotments /></ProtectedRoute>
           } />
-          <Route path="/timetable" element={
-            <ProtectedRoute><Timetable /></ProtectedRoute>
-          } />
 
-          {/* Admin-only */}
+          {/* ── Admin-only routes ─────────────────────────────── */}
           <Route path="/admin" element={
             <ProtectedRoute adminOnly><AdminPanel /></ProtectedRoute>
           } />
@@ -63,7 +62,7 @@ function AppInner() {
             <ProtectedRoute adminOnly><FacultySubjects /></ProtectedRoute>
           } />
 
-          {/* Fallback */}
+          {/* ── Fallback ──────────────────────────────────────── */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
