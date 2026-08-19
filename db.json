@@ -1,0 +1,1302 @@
+{
+  "rooms": [
+    {
+      "id": "vy-101",
+      "name": "VY101",
+      "floor": 1,
+      "type": "classroom",
+      "capacity": 60,
+      "facilities": [
+        "Projector",
+        "Whiteboard"
+      ],
+      "status": "available"
+    },
+    {
+      "id": "vy-102",
+      "name": "VY102",
+      "floor": 1,
+      "type": "classroom",
+      "capacity": 60,
+      "facilities": [
+        "Projector",
+        "Whiteboard"
+      ],
+      "status": "available"
+    },
+    {
+      "id": "vy-103",
+      "name": "VY103",
+      "floor": 1,
+      "type": "classroom",
+      "capacity": 60,
+      "facilities": [
+        "Projector",
+        "Whiteboard"
+      ],
+      "status": "available"
+    },
+    {
+      "id": "vy-104",
+      "name": "VY104",
+      "floor": 1,
+      "type": "classroom",
+      "capacity": 60,
+      "facilities": [
+        "Projector",
+        "Whiteboard"
+      ],
+      "status": "available"
+    },
+    {
+      "id": "vy-122",
+      "name": "VY122",
+      "floor": 1,
+      "type": "classroom",
+      "capacity": 60,
+      "facilities": [
+        "Projector",
+        "Whiteboard"
+      ],
+      "status": "available"
+    },
+    {
+      "id": "vy-124",
+      "name": "VY124",
+      "floor": 1,
+      "type": "classroom",
+      "capacity": 60,
+      "facilities": [
+        "Projector",
+        "Whiteboard"
+      ],
+      "status": "available"
+    },
+    {
+      "id": "vy-113",
+      "name": "VY113",
+      "floor": 1,
+      "type": "classroom",
+      "capacity": 60,
+      "facilities": [
+        "Projector",
+        "Whiteboard"
+      ],
+      "status": "available"
+    },
+    {
+      "id": "vy-114",
+      "name": "VY114",
+      "floor": 1,
+      "type": "classroom",
+      "capacity": 60,
+      "facilities": [
+        "Projector",
+        "Whiteboard"
+      ],
+      "status": "available"
+    },
+    {
+      "id": "vy-126",
+      "name": "VY126",
+      "floor": 1,
+      "type": "lab",
+      "capacity": 35,
+      "facilities": [
+        "Computers",
+        "Projector",
+        "AC"
+      ],
+      "status": "available"
+    },
+    {
+      "id": "vy-127",
+      "name": "VY127",
+      "floor": 1,
+      "type": "lab",
+      "capacity": 35,
+      "facilities": [
+        "Computers",
+        "Projector",
+        "AC"
+      ],
+      "status": "available"
+    },
+    {
+      "id": "vy-128",
+      "name": "VY128",
+      "floor": 1,
+      "type": "lab",
+      "capacity": 35,
+      "facilities": [
+        "Computers",
+        "Projector",
+        "AC"
+      ],
+      "status": "available"
+    },
+    {
+      "id": "vy-129",
+      "name": "VY129",
+      "floor": 1,
+      "type": "lab",
+      "capacity": 35,
+      "facilities": [
+        "Computers",
+        "Projector",
+        "AC"
+      ],
+      "status": "available"
+    },
+    {
+      "id": "vy-201",
+      "name": "VY201",
+      "floor": 2,
+      "type": "classroom",
+      "capacity": 60,
+      "facilities": [
+        "Projector",
+        "Whiteboard"
+      ],
+      "status": "available"
+    },
+    {
+      "id": "vy-202",
+      "name": "VY202",
+      "floor": 2,
+      "type": "classroom",
+      "capacity": 60,
+      "facilities": [
+        "Projector",
+        "Whiteboard"
+      ],
+      "status": "available"
+    },
+    {
+      "id": "vy-203",
+      "name": "VY203",
+      "floor": 2,
+      "type": "classroom",
+      "capacity": 60,
+      "facilities": [
+        "Projector",
+        "Whiteboard"
+      ],
+      "status": "available"
+    },
+    {
+      "id": "vy-204",
+      "name": "VY204",
+      "floor": 2,
+      "type": "classroom",
+      "capacity": 60,
+      "facilities": [
+        "Projector",
+        "Whiteboard"
+      ],
+      "status": "available"
+    },
+    {
+      "id": "vy-222",
+      "name": "VY222",
+      "floor": 2,
+      "type": "classroom",
+      "capacity": 60,
+      "facilities": [
+        "Projector",
+        "Whiteboard"
+      ],
+      "status": "available"
+    },
+    {
+      "id": "vy-224",
+      "name": "VY224",
+      "floor": 2,
+      "type": "classroom",
+      "capacity": 60,
+      "facilities": [
+        "Projector",
+        "Whiteboard"
+      ],
+      "status": "available"
+    },
+    {
+      "id": "vy-213",
+      "name": "VY213",
+      "floor": 2,
+      "type": "classroom",
+      "capacity": 60,
+      "facilities": [
+        "Projector",
+        "Whiteboard"
+      ],
+      "status": "available"
+    },
+    {
+      "id": "vy-214",
+      "name": "VY214",
+      "floor": 2,
+      "type": "classroom",
+      "capacity": 60,
+      "facilities": [
+        "Projector",
+        "Whiteboard"
+      ],
+      "status": "available"
+    },
+    {
+      "id": "vy-226",
+      "name": "VY226",
+      "floor": 2,
+      "type": "lab",
+      "capacity": 35,
+      "facilities": [
+        "Computers",
+        "Projector",
+        "AC"
+      ],
+      "status": "available"
+    },
+    {
+      "id": "vy-227",
+      "name": "VY227",
+      "floor": 2,
+      "type": "lab",
+      "capacity": 35,
+      "facilities": [
+        "Computers",
+        "Projector",
+        "AC"
+      ],
+      "status": "available"
+    },
+    {
+      "id": "vy-228",
+      "name": "VY228",
+      "floor": 2,
+      "type": "lab",
+      "capacity": 35,
+      "facilities": [
+        "Computers",
+        "Projector",
+        "AC"
+      ],
+      "status": "available"
+    },
+    {
+      "id": "vy-229",
+      "name": "VY229",
+      "floor": 2,
+      "type": "lab",
+      "capacity": 35,
+      "facilities": [
+        "Computers",
+        "Projector",
+        "AC"
+      ],
+      "status": "available"
+    },
+    {
+      "id": "vy-301",
+      "name": "VY301",
+      "floor": 3,
+      "type": "classroom",
+      "capacity": 60,
+      "facilities": [
+        "Projector",
+        "Whiteboard"
+      ],
+      "status": "available"
+    },
+    {
+      "id": "vy-302",
+      "name": "VY302",
+      "floor": 3,
+      "type": "classroom",
+      "capacity": 60,
+      "facilities": [
+        "Projector",
+        "Whiteboard"
+      ],
+      "status": "available"
+    },
+    {
+      "id": "vy-303",
+      "name": "VY303",
+      "floor": 3,
+      "type": "classroom",
+      "capacity": 60,
+      "facilities": [
+        "Projector",
+        "Whiteboard"
+      ],
+      "status": "available"
+    },
+    {
+      "id": "vy-304",
+      "name": "VY304",
+      "floor": 3,
+      "type": "classroom",
+      "capacity": 60,
+      "facilities": [
+        "Projector",
+        "Whiteboard"
+      ],
+      "status": "available"
+    },
+    {
+      "id": "vy-322",
+      "name": "VY322",
+      "floor": 3,
+      "type": "classroom",
+      "capacity": 60,
+      "facilities": [
+        "Projector",
+        "Whiteboard"
+      ],
+      "status": "available"
+    },
+    {
+      "id": "vy-324",
+      "name": "VY324",
+      "floor": 3,
+      "type": "classroom",
+      "capacity": 60,
+      "facilities": [
+        "Projector",
+        "Whiteboard"
+      ],
+      "status": "available"
+    },
+    {
+      "id": "vy-313",
+      "name": "VY313",
+      "floor": 3,
+      "type": "classroom",
+      "capacity": 60,
+      "facilities": [
+        "Projector",
+        "Whiteboard"
+      ],
+      "status": "available"
+    },
+    {
+      "id": "vy-314",
+      "name": "VY314",
+      "floor": 3,
+      "type": "classroom",
+      "capacity": 60,
+      "facilities": [
+        "Projector",
+        "Whiteboard"
+      ],
+      "status": "available"
+    },
+    {
+      "id": "vy-326",
+      "name": "VY326",
+      "floor": 3,
+      "type": "lab",
+      "capacity": 35,
+      "facilities": [
+        "Computers",
+        "Projector",
+        "AC"
+      ],
+      "status": "available"
+    },
+    {
+      "id": "vy-327",
+      "name": "VY327",
+      "floor": 3,
+      "type": "lab",
+      "capacity": 35,
+      "facilities": [
+        "Computers",
+        "Projector",
+        "AC"
+      ],
+      "status": "available"
+    },
+    {
+      "id": "vy-328",
+      "name": "VY328",
+      "floor": 3,
+      "type": "lab",
+      "capacity": 35,
+      "facilities": [
+        "Computers",
+        "Projector",
+        "AC"
+      ],
+      "status": "available"
+    },
+    {
+      "id": "vy-329",
+      "name": "VY329",
+      "floor": 3,
+      "type": "lab",
+      "capacity": 35,
+      "facilities": [
+        "Computers",
+        "Projector",
+        "AC"
+      ],
+      "status": "available"
+    },
+    {
+      "id": "vy-401",
+      "name": "VY401",
+      "floor": 4,
+      "type": "classroom",
+      "capacity": 60,
+      "facilities": [
+        "Projector",
+        "Whiteboard"
+      ],
+      "status": "available"
+    },
+    {
+      "id": "vy-402",
+      "name": "VY402",
+      "floor": 4,
+      "type": "classroom",
+      "capacity": 60,
+      "facilities": [
+        "Projector",
+        "Whiteboard"
+      ],
+      "status": "available"
+    },
+    {
+      "id": "vy-403",
+      "name": "VY403",
+      "floor": 4,
+      "type": "classroom",
+      "capacity": 60,
+      "facilities": [
+        "Projector",
+        "Whiteboard"
+      ],
+      "status": "available"
+    },
+    {
+      "id": "vy-404",
+      "name": "VY404",
+      "floor": 4,
+      "type": "classroom",
+      "capacity": 60,
+      "facilities": [
+        "Projector",
+        "Whiteboard"
+      ],
+      "status": "available"
+    },
+    {
+      "id": "vy-422",
+      "name": "VY422",
+      "floor": 4,
+      "type": "classroom",
+      "capacity": 60,
+      "facilities": [
+        "Projector",
+        "Whiteboard"
+      ],
+      "status": "available"
+    },
+    {
+      "id": "vy-424",
+      "name": "VY424",
+      "floor": 4,
+      "type": "classroom",
+      "capacity": 60,
+      "facilities": [
+        "Projector",
+        "Whiteboard"
+      ],
+      "status": "available"
+    },
+    {
+      "id": "vy-413",
+      "name": "VY413",
+      "floor": 4,
+      "type": "classroom",
+      "capacity": 60,
+      "facilities": [
+        "Projector",
+        "Whiteboard"
+      ],
+      "status": "available"
+    },
+    {
+      "id": "vy-414",
+      "name": "VY414",
+      "floor": 4,
+      "type": "classroom",
+      "capacity": 60,
+      "facilities": [
+        "Projector",
+        "Whiteboard"
+      ],
+      "status": "available"
+    },
+    {
+      "id": "vy-426",
+      "name": "VY426",
+      "floor": 4,
+      "type": "lab",
+      "capacity": 35,
+      "facilities": [
+        "Computers",
+        "Projector",
+        "AC"
+      ],
+      "status": "available"
+    },
+    {
+      "id": "vy-427",
+      "name": "VY427",
+      "floor": 4,
+      "type": "lab",
+      "capacity": 35,
+      "facilities": [
+        "Computers",
+        "Projector",
+        "AC"
+      ],
+      "status": "available"
+    },
+    {
+      "id": "vy-428",
+      "name": "VY428",
+      "floor": 4,
+      "type": "lab",
+      "capacity": 35,
+      "facilities": [
+        "Computers",
+        "Projector",
+        "AC"
+      ],
+      "status": "available"
+    },
+    {
+      "id": "vy-429",
+      "name": "VY429",
+      "floor": 4,
+      "type": "lab",
+      "capacity": 35,
+      "facilities": [
+        "Computers",
+        "Projector",
+        "AC"
+      ],
+      "status": "available"
+    },
+    {
+      "id": "vy-501",
+      "name": "VY501",
+      "floor": 5,
+      "type": "classroom",
+      "capacity": 60,
+      "facilities": [
+        "Projector",
+        "Whiteboard"
+      ],
+      "status": "available"
+    },
+    {
+      "id": "vy-502",
+      "name": "VY502",
+      "floor": 5,
+      "type": "classroom",
+      "capacity": 60,
+      "facilities": [
+        "Projector",
+        "Whiteboard"
+      ],
+      "status": "available"
+    },
+    {
+      "id": "vy-503",
+      "name": "VY503",
+      "floor": 5,
+      "type": "classroom",
+      "capacity": 60,
+      "facilities": [
+        "Projector",
+        "Whiteboard"
+      ],
+      "status": "available"
+    },
+    {
+      "id": "vy-504",
+      "name": "VY504",
+      "floor": 5,
+      "type": "classroom",
+      "capacity": 60,
+      "facilities": [
+        "Projector",
+        "Whiteboard"
+      ],
+      "status": "available"
+    },
+    {
+      "id": "vy-522",
+      "name": "VY522",
+      "floor": 5,
+      "type": "classroom",
+      "capacity": 60,
+      "facilities": [
+        "Projector",
+        "Whiteboard"
+      ],
+      "status": "available"
+    },
+    {
+      "id": "vy-524",
+      "name": "VY524",
+      "floor": 5,
+      "type": "classroom",
+      "capacity": 60,
+      "facilities": [
+        "Projector",
+        "Whiteboard"
+      ],
+      "status": "available"
+    },
+    {
+      "id": "vy-513",
+      "name": "VY513",
+      "floor": 5,
+      "type": "classroom",
+      "capacity": 60,
+      "facilities": [
+        "Projector",
+        "Whiteboard"
+      ],
+      "status": "available"
+    },
+    {
+      "id": "vy-514",
+      "name": "VY514",
+      "floor": 5,
+      "type": "classroom",
+      "capacity": 60,
+      "facilities": [
+        "Projector",
+        "Whiteboard"
+      ],
+      "status": "available"
+    },
+    {
+      "id": "vy-526",
+      "name": "VY526",
+      "floor": 5,
+      "type": "lab",
+      "capacity": 35,
+      "facilities": [
+        "Computers",
+        "Projector",
+        "AC"
+      ],
+      "status": "available"
+    },
+    {
+      "id": "vy-527",
+      "name": "VY527",
+      "floor": 5,
+      "type": "lab",
+      "capacity": 35,
+      "facilities": [
+        "Computers",
+        "Projector",
+        "AC"
+      ],
+      "status": "available"
+    },
+    {
+      "id": "vy-528",
+      "name": "VY528",
+      "floor": 5,
+      "type": "lab",
+      "capacity": 35,
+      "facilities": [
+        "Computers",
+        "Projector",
+        "AC"
+      ],
+      "status": "available"
+    },
+    {
+      "id": "vy-529",
+      "name": "VY529",
+      "floor": 5,
+      "type": "lab",
+      "capacity": 35,
+      "facilities": [
+        "Computers",
+        "Projector",
+        "AC"
+      ],
+      "status": "available"
+    }
+  ],
+  "faculty": [
+    {
+      "id": "fac-001",
+      "name": "Dr. R. Sharma",
+      "department": "Computer Science",
+      "email": "r.sharma@mitwpu.edu.in",
+      "subjects": [
+        "sub-001",
+        "sub-002"
+      ]
+    },
+    {
+      "id": "fac-002",
+      "name": "Prof. A. Verma",
+      "department": "Electronics",
+      "email": "a.verma@mitwpu.edu.in",
+      "subjects": [
+        "sub-003"
+      ]
+    },
+    {
+      "id": "fac-003",
+      "name": "Dr. S. Gupta",
+      "department": "Mathematics",
+      "email": "s.gupta@mitwpu.edu.in",
+      "subjects": [
+        "sub-004"
+      ]
+    },
+    {
+      "id": "fac-am",
+      "name": "Dr. Amit Mishra",
+      "department": "Computer Science"
+    },
+    {
+      "id": "fac-rk",
+      "name": "Dr. Raj Kumar (RK)",
+      "department": "Computer Science"
+    },
+    {
+      "id": "fac-aam",
+      "name": "Dr. A. A. Mishra (AAM)",
+      "department": "Computer Science"
+    },
+    {
+      "id": "fac-pc",
+      "name": "Dr. P. C. Sharma (PC)",
+      "department": "Computer Science"
+    },
+    {
+      "id": "fac-ask",
+      "name": "Dr. A. S. Kumar (ASK)",
+      "department": "Computer Science"
+    },
+    {
+      "id": "fac-db",
+      "name": "Dr. D. B. Singh (DB)",
+      "department": "Computer Science"
+    },
+    {
+      "id": "fac-pp",
+      "name": "Dr. P. P. Patel (PP)",
+      "department": "Computer Science"
+    },
+    {
+      "id": "fac-pk",
+      "name": "Dr. P. K. Gupta (PK)",
+      "department": "Computer Science"
+    }
+  ],
+  "subjects": [
+    {
+      "id": "sub-001",
+      "name": "Data Structures",
+      "code": "CS301",
+      "department": "Computer Science",
+      "type": "theory"
+    },
+    {
+      "id": "sub-002",
+      "name": "Database Systems",
+      "code": "CS401",
+      "department": "Computer Science",
+      "type": "theory"
+    },
+    {
+      "id": "sub-003",
+      "name": "Digital Electronics",
+      "code": "EC201",
+      "department": "Electronics",
+      "type": "practical"
+    },
+    {
+      "id": "sub-004",
+      "name": "Engineering Mathematics",
+      "code": "MA101",
+      "department": "Mathematics",
+      "type": "theory"
+    },
+    {
+      "id": "sub-se",
+      "name": "Software Engineering (SE)",
+      "code": "SE101",
+      "department": "Computer Science",
+      "type": "theory"
+    },
+    {
+      "id": "sub-icc",
+      "name": "Introduction to Cloud Computing (ICC)",
+      "code": "ICC101",
+      "department": "Computer Science",
+      "type": "theory"
+    },
+    {
+      "id": "sub-dmw",
+      "name": "Data Mining and Warehousing (DMW)",
+      "code": "DMW101",
+      "department": "Computer Science",
+      "type": "theory"
+    },
+    {
+      "id": "sub-insqd",
+      "name": "Information Security (INSQD)",
+      "code": "INS101",
+      "department": "Computer Science",
+      "type": "theory"
+    },
+    {
+      "id": "sub-java",
+      "name": "Advanced Java Programming (JAVA)",
+      "code": "JAV101",
+      "department": "Computer Science",
+      "type": "theory"
+    },
+    {
+      "id": "sub-imlp",
+      "name": "Intro to Machine Learning (IMLP)",
+      "code": "IML101",
+      "department": "Computer Science",
+      "type": "theory"
+    },
+    {
+      "id": "sub-mcp",
+      "name": "Microprocessor Architecture (MCP)",
+      "code": "MCP101",
+      "department": "Computer Science",
+      "type": "theory"
+    },
+    {
+      "id": "sub-cog",
+      "name": "Cognitive Skills",
+      "code": "COG101",
+      "department": "Humanities",
+      "type": "theory"
+    },
+    {
+      "id": "sub-pbl",
+      "name": "Project Based Learning (PBL-III)",
+      "code": "PBL101",
+      "department": "Computer Science",
+      "type": "theory"
+    }
+  ],
+  "allotments": [
+    {
+      "id": "allot-t-1",
+      "roomId": "vy-427",
+      "subjectId": "sub-icc",
+      "facultyId": "fac-rk",
+      "day": "Monday",
+      "startTime": "09:00",
+      "endTime": "11:00",
+      "semester": "Odd 2026",
+      "section": "A"
+    },
+    {
+      "id": "allot-t-2",
+      "roomId": "vy-414",
+      "subjectId": "sub-dmw",
+      "facultyId": "fac-aam",
+      "day": "Monday",
+      "startTime": "11:15",
+      "endTime": "12:15",
+      "semester": "Odd 2026",
+      "section": "A"
+    },
+    {
+      "id": "allot-t-3",
+      "roomId": "vy-414",
+      "subjectId": "sub-insqd",
+      "facultyId": "fac-pc",
+      "day": "Monday",
+      "startTime": "12:15",
+      "endTime": "13:15",
+      "semester": "Odd 2026",
+      "section": "A"
+    },
+    {
+      "id": "allot-t-4",
+      "roomId": "vy-428",
+      "subjectId": "sub-java",
+      "facultyId": "fac-ask",
+      "day": "Monday",
+      "startTime": "14:00",
+      "endTime": "16:00",
+      "semester": "Odd 2026",
+      "section": "A"
+    },
+    {
+      "id": "allot-t-5",
+      "roomId": "vy-414",
+      "subjectId": "sub-se",
+      "facultyId": "fac-am",
+      "day": "Monday",
+      "startTime": "16:00",
+      "endTime": "17:00",
+      "semester": "Odd 2026",
+      "section": "A"
+    },
+    {
+      "id": "allot-t-6",
+      "roomId": "vy-414",
+      "subjectId": "sub-insqd",
+      "facultyId": "fac-pc",
+      "day": "Tuesday",
+      "startTime": "09:00",
+      "endTime": "10:00",
+      "semester": "Odd 2026",
+      "section": "A"
+    },
+    {
+      "id": "allot-t-7",
+      "roomId": "vy-414",
+      "subjectId": "sub-se",
+      "facultyId": "fac-am",
+      "day": "Tuesday",
+      "startTime": "10:00",
+      "endTime": "11:00",
+      "semester": "Odd 2026",
+      "section": "A"
+    },
+    {
+      "id": "allot-t-8",
+      "roomId": "vy-428",
+      "subjectId": "sub-dmw",
+      "facultyId": "fac-aam",
+      "day": "Tuesday",
+      "startTime": "11:15",
+      "endTime": "13:15",
+      "semester": "Odd 2026",
+      "section": "A"
+    },
+    {
+      "id": "allot-t-9",
+      "roomId": "vy-427",
+      "subjectId": "sub-icc",
+      "facultyId": "fac-rk",
+      "day": "Tuesday",
+      "startTime": "14:00",
+      "endTime": "16:00",
+      "semester": "Odd 2026",
+      "section": "A"
+    },
+    {
+      "id": "allot-t-10",
+      "roomId": "vy-414",
+      "subjectId": "sub-imlp",
+      "facultyId": "fac-db",
+      "day": "Tuesday",
+      "startTime": "16:00",
+      "endTime": "17:00",
+      "semester": "Odd 2026",
+      "section": "A"
+    },
+    {
+      "id": "allot-t-11",
+      "roomId": "vy-427",
+      "subjectId": "sub-dmw",
+      "facultyId": "fac-aam",
+      "day": "Wednesday",
+      "startTime": "09:00",
+      "endTime": "11:00",
+      "semester": "Odd 2026",
+      "section": "A"
+    },
+    {
+      "id": "allot-t-12",
+      "roomId": "vy-414",
+      "subjectId": "sub-se",
+      "facultyId": "fac-am",
+      "day": "Wednesday",
+      "startTime": "11:15",
+      "endTime": "12:15",
+      "semester": "Odd 2026",
+      "section": "A"
+    },
+    {
+      "id": "allot-t-13",
+      "roomId": "vy-414",
+      "subjectId": "sub-imlp",
+      "facultyId": "fac-db",
+      "day": "Wednesday",
+      "startTime": "12:15",
+      "endTime": "13:15",
+      "semester": "Odd 2026",
+      "section": "A"
+    },
+    {
+      "id": "allot-t-14",
+      "roomId": "vy-427",
+      "subjectId": "sub-mcp",
+      "facultyId": "fac-pp",
+      "day": "Wednesday",
+      "startTime": "14:00",
+      "endTime": "16:00",
+      "semester": "Odd 2026",
+      "section": "A"
+    },
+    {
+      "id": "allot-t-15",
+      "roomId": "vy-414",
+      "subjectId": "sub-java",
+      "facultyId": "fac-ask",
+      "day": "Wednesday",
+      "startTime": "16:00",
+      "endTime": "17:00",
+      "semester": "Odd 2026",
+      "section": "A"
+    },
+    {
+      "id": "allot-t-16",
+      "roomId": "vy-414",
+      "subjectId": "sub-se",
+      "facultyId": "fac-am",
+      "day": "Thursday",
+      "startTime": "09:00",
+      "endTime": "10:00",
+      "semester": "Odd 2026",
+      "section": "A"
+    },
+    {
+      "id": "allot-t-17",
+      "roomId": "vy-414",
+      "subjectId": "sub-imlp",
+      "facultyId": "fac-db",
+      "day": "Thursday",
+      "startTime": "10:00",
+      "endTime": "11:00",
+      "semester": "Odd 2026",
+      "section": "A"
+    },
+    {
+      "id": "allot-t-18",
+      "roomId": "vy-427",
+      "subjectId": "sub-insqd",
+      "facultyId": "fac-pc",
+      "day": "Thursday",
+      "startTime": "11:15",
+      "endTime": "13:15",
+      "semester": "Odd 2026",
+      "section": "A"
+    },
+    {
+      "id": "allot-t-19",
+      "roomId": "vy-414",
+      "subjectId": "sub-icc",
+      "facultyId": "fac-rk",
+      "day": "Thursday",
+      "startTime": "14:00",
+      "endTime": "15:00",
+      "semester": "Odd 2026",
+      "section": "A"
+    },
+    {
+      "id": "allot-t-20",
+      "roomId": "vy-414",
+      "subjectId": "sub-java",
+      "facultyId": "fac-ask",
+      "day": "Thursday",
+      "startTime": "15:00",
+      "endTime": "16:00",
+      "semester": "Odd 2026",
+      "section": "A"
+    },
+    {
+      "id": "allot-t-21",
+      "roomId": "vy-414",
+      "subjectId": "sub-cog",
+      "facultyId": "fac-pp",
+      "day": "Thursday",
+      "startTime": "16:00",
+      "endTime": "17:00",
+      "semester": "Odd 2026",
+      "section": "A"
+    },
+    {
+      "id": "allot-t-22",
+      "roomId": "vy-414",
+      "subjectId": "sub-dmw",
+      "facultyId": "fac-aam",
+      "day": "Friday",
+      "startTime": "09:00",
+      "endTime": "10:00",
+      "semester": "Odd 2026",
+      "section": "A"
+    },
+    {
+      "id": "allot-t-23",
+      "roomId": "vy-414",
+      "subjectId": "sub-icc",
+      "facultyId": "fac-rk",
+      "day": "Friday",
+      "startTime": "10:00",
+      "endTime": "11:00",
+      "semester": "Odd 2026",
+      "section": "A"
+    },
+    {
+      "id": "allot-t-24",
+      "roomId": "vy-428",
+      "subjectId": "sub-se",
+      "facultyId": "fac-am",
+      "day": "Friday",
+      "startTime": "11:15",
+      "endTime": "13:15",
+      "semester": "Odd 2026",
+      "section": "A"
+    },
+    {
+      "id": "allot-t-25",
+      "roomId": "vy-428",
+      "subjectId": "sub-imlp",
+      "facultyId": "fac-db",
+      "day": "Friday",
+      "startTime": "14:00",
+      "endTime": "16:00",
+      "semester": "Odd 2026",
+      "section": "A"
+    },
+    {
+      "id": "allot-t-26",
+      "roomId": "vy-414",
+      "subjectId": "sub-insqd",
+      "facultyId": "fac-pc",
+      "day": "Friday",
+      "startTime": "16:00",
+      "endTime": "17:00",
+      "semester": "Odd 2026",
+      "section": "A"
+    },
+    {
+      "id": "allot-t-27",
+      "roomId": "vy-427",
+      "subjectId": "sub-pbl",
+      "facultyId": "fac-pk",
+      "day": "Saturday",
+      "startTime": "09:00",
+      "endTime": "11:00",
+      "semester": "Odd 2026",
+      "section": "A"
+    },
+    {
+      "id": "allot-t-28",
+      "roomId": "vy-414",
+      "subjectId": "sub-cog",
+      "facultyId": "fac-pp",
+      "day": "Saturday",
+      "startTime": "11:15",
+      "endTime": "13:15",
+      "semester": "Odd 2026",
+      "section": "A"
+    },
+    {
+      "id": "t5gVQG-KcGU",
+      "roomId": "vy-101",
+      "subjectId": "sub-001",
+      "facultyId": "fac-001",
+      "day": "Monday",
+      "startTime": "08:00",
+      "endTime": "09:00",
+      "semester": "Odd 2026",
+      "section": "A",
+      "canceledDates": []
+    },
+    {
+      "id": "JdJDJP08Tqo",
+      "roomId": "vy-101",
+      "subjectId": "sub-001",
+      "facultyId": "fac-001",
+      "day": "Monday",
+      "startTime": "10:00",
+      "endTime": "11:00",
+      "semester": "Odd 2026",
+      "section": "A",
+      "canceledDates": []
+    },
+    {
+      "id": "2Aaa8NUj61c",
+      "roomId": "vy-101",
+      "subjectId": "sub-001",
+      "facultyId": "fac-001",
+      "day": "Monday",
+      "startTime": "11:00",
+      "endTime": "12:00",
+      "semester": "Odd 2026",
+      "section": "A",
+      "canceledDates": []
+    },
+    {
+      "id": "v9rx9sX9AOY",
+      "roomId": "vy-101",
+      "subjectId": "sub-001",
+      "facultyId": "fac-001",
+      "day": "Monday",
+      "startTime": "12:00",
+      "endTime": "13:00",
+      "semester": "Odd 2026",
+      "section": "A",
+      "canceledDates": []
+    },
+    {
+      "id": "g4lDT9qU09k",
+      "roomId": "vy-102",
+      "subjectId": "sub-002",
+      "facultyId": "fac-002",
+      "day": "Monday",
+      "startTime": "08:00",
+      "endTime": "09:00",
+      "semester": "Odd 2026",
+      "section": "B",
+      "canceledDates": []
+    },
+    {
+      "id": "Ut5zwzfTjsE",
+      "roomId": "vy-101",
+      "subjectId": "sub-002",
+      "facultyId": "fac-002",
+      "day": "Monday",
+      "startTime": "09:00",
+      "endTime": "10:00",
+      "semester": "Odd 2026",
+      "section": "B",
+      "canceledDates": []
+    },
+    {
+      "id": "b0Z62fICqDw",
+      "roomId": "vy-102",
+      "subjectId": "sub-002",
+      "facultyId": "fac-002",
+      "day": "Monday",
+      "startTime": "10:00",
+      "endTime": "11:00",
+      "semester": "Odd 2026",
+      "section": "B",
+      "canceledDates": []
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}

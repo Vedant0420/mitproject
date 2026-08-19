@@ -1,0 +1,130 @@
+.tt-mode-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: var(--space-lg);
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 5px;
+  width: fit-content;
+}
+.tt-mode-tab {
+  padding: 8px 22px;
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  transition: all var(--dur-fast) var(--ease-out);
+  font-family: var(--font-sans);
+}
+.tt-mode-tab:hover  { color: var(--text-primary); }
+.tt-mode-tab.active {
+  background: linear-gradient(135deg, rgba(79,140,255,0.2), rgba(79,140,255,0.08));
+  color: var(--blue-light);
+}
+
+.timetable-selector {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+  flex-wrap: wrap;
+}
+
+.timetable-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--space-md);
+  display: flex;
+  align-items: center;
+}
+
+/* Grid */
+.tt-grid-wrapper {
+  overflow-x: auto;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  margin-bottom: var(--space-lg);
+}
+.tt-grid-wrapper.compact { margin-bottom: var(--space-sm); }
+
+.tt-table {
+  min-width: 700px;
+  border-collapse: collapse;
+  width: 100%;
+}
+.tt-table thead tr { background: rgba(79,140,255,0.06); }
+
+.tt-th-time {
+  width: 90px;
+  padding: 10px 12px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  text-align: left;
+  border-right: 1px solid var(--border);
+}
+.tt-th-day {
+  padding: 10px 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary);
+  text-align: center;
+  border-right: 1px solid rgba(255,255,255,0.04);
+}
+.tt-time-cell {
+  padding: 6px 10px;
+  font-size: 0.72rem;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  border-right: 1px solid var(--border);
+  border-top: 1px solid rgba(255,255,255,0.03);
+  white-space: nowrap;
+  vertical-align: top;
+}
+.tt-cell {
+  padding: 4px;
+  border-top: 1px solid rgba(255,255,255,0.03);
+  border-right: 1px solid rgba(255,255,255,0.03);
+  vertical-align: top;
+  min-width: 100px;
+}
+.tt-slot {
+  padding: 5px 8px;
+  margin: 2px 0;
+  font-size: 0.75rem;
+}
+.tt-slot-subject {
+  font-weight: 700;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tt-slot-meta {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Floor timetable */
+.floor-tt-section { margin-bottom: var(--space-xl); }
+.floor-tt-room-label {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--space-sm);
+  padding-left: 4px;
+  border-left: 3px solid var(--blue-primary);
+  padding-left: 10px;
+}

@@ -1,0 +1,30 @@
+.fs-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: var(--space-lg);
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 5px;
+  width: fit-content;
+}
+.fs-tab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 22px;
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  transition: all var(--dur-fast) var(--ease-out);
+  font-family: var(--font-sans);
+}
+.fs-tab:hover  { color: var(--text-primary); }
+.fs-tab.active {
+  background: linear-gradient(135deg, rgba(79,140,255,0.2), rgba(79,140,255,0.08));
+  color: var(--blue-light);
+}
