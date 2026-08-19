@@ -2,7 +2,7 @@ import { useApp } from '../context/AppContext.jsx';
 import { useNavigate } from 'react-router-dom';
 import {
   Building2, DoorOpen, FlaskConical, CalendarCheck,
-  Users, TrendingUp, ArrowRight, Clock, CheckCircle, AlertCircle
+  Users, TrendingUp, ArrowRight, Clock, CheckCircle, AlertCircle, Zap
 } from 'lucide-react';
 import { FLOOR_LABELS, FLOORS } from '../utils/constants.js';
 import { formatTimeRange } from '../utils/helpers.js';
@@ -45,7 +45,7 @@ export default function Dashboard() {
     <div className="fade-in">
       {/* Header */}
       <div className="page-header">
-        <h1>🏛️ Vyas Building</h1>
+        <h1>Vyas Building</h1>
         <p>Classroom Allotment Management System — 8 Floors Overview</p>
       </div>
 
@@ -176,7 +176,7 @@ export default function Dashboard() {
         {/* Quick Actions */}
         <div className="card dashboard-card">
           <div className="dashboard-card-header">
-            <h3>⚡ Quick Actions</h3>
+            <h3><Zap size={18} /> Quick Actions</h3>
           </div>
           <div className="quick-actions">
             {[
