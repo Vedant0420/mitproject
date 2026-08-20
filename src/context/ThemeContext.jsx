@@ -3,8 +3,11 @@ import { createContext, useContext, useState, useEffect } from 'react';
 const ThemeContext = createContext(null);
 
 export function ThemeProvider({ children }) {
+  // Always default to dark. Only persist if user explicitly toggles.
   const [theme, setTheme] = useState(() => {
-    return localStorage.getItem('vyas-theme') || 'dark';
+    const saved = localStorage.getItem('vyas-theme');
+    // Only honour saved value if it's explicitly 'light' (user chose it)
+    return saved === 'light' ? 'light' : 'dark';
   });
 
   useEffect(() => {
