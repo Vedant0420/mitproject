@@ -27,7 +27,7 @@ function AppInner() {
     <div className="app-layout">
       {currentUser && <Navbar />}
 
-      <main className="main-content fade-in">
+      <main className={`main-content fade-in${!currentUser ? ' no-nav' : ''}`}>
         <Routes>
           {/* ── Public auth pages ─────────────────────────────── */}
           <Route path="/login"  element={currentUser ? <Navigate to="/" replace /> : <Login />} />

@@ -78,7 +78,7 @@
   letter-spacing: 0.06em;
   color: var(--text-secondary);
   text-align: center;
-  border-right: 1px solid rgba(255,255,255,0.04);
+  border-right: 1px solid var(--border-subtle, rgba(255,255,255,0.04));
 }
 .tt-time-cell {
   padding: 6px 10px;
@@ -86,14 +86,14 @@
   font-family: var(--font-mono);
   color: var(--text-muted);
   border-right: 1px solid var(--border);
-  border-top: 1px solid rgba(255,255,255,0.03);
+  border-top: 1px solid var(--border-subtle, rgba(255,255,255,0.03));
   white-space: nowrap;
   vertical-align: top;
 }
 .tt-cell {
   padding: 4px;
-  border-top: 1px solid rgba(255,255,255,0.03);
-  border-right: 1px solid rgba(255,255,255,0.03);
+  border-top: 1px solid var(--border-subtle, rgba(255,255,255,0.03));
+  border-right: 1px solid var(--border-subtle, rgba(255,255,255,0.03));
   vertical-align: top;
   min-width: 100px;
 }

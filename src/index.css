@@ -53,16 +53,16 @@
 
 /* ── Light Mode ──────────────────────────────────────── */
 [data-theme="light"] {
-  --bg-base:        #f0f4ff;
-  --bg-surface:     #e4eaff;
-  --bg-card:        rgba(255, 255, 255, 0.88);
-  --bg-card-hover:  rgba(255, 255, 255, 0.97);
+  --bg-base:        #eef2ff;
+  --bg-surface:     #e0e7ff;
+  --bg-card:        rgba(255, 255, 255, 0.90);
+  --bg-card-hover:  rgba(255, 255, 255, 1);
   --bg-input:       rgba(0, 0, 0, 0.04);
   --bg-modal:       #ffffff;
 
-  --border:         rgba(79, 140, 255, 0.18);
-  --border-strong:  rgba(79, 140, 255, 0.40);
-  --border-subtle:  rgba(0, 0, 0, 0.06);
+  --border:         rgba(99, 102, 241, 0.16);
+  --border-strong:  rgba(99, 102, 241, 0.36);
+  --border-subtle:  rgba(0, 0, 0, 0.07);
 
   --blue-primary:   #2563eb;
   --blue-light:     #3b82f6;
@@ -137,8 +137,8 @@ body {
   line-height: 1.6;
   min-height: 100vh;
   overflow-x: hidden;
-  transition: background var(--dur-slow) var(--ease-out),
-              color     var(--dur-slow) var(--ease-out);
+  transition: background-color var(--dur-slow) var(--ease-out),
+              color           var(--dur-slow) var(--ease-out);
 }
 
 /* Ambient glows — dark only */
@@ -373,6 +373,12 @@ tbody tr:hover { background: rgba(79, 140, 255, 0.04); }
   padding: 28px 32px 48px;
   min-height: 100vh;
 }
+/* When user is logged in, the Navbar renders a spacer div already */
+/* So main-content only needs its normal padding */
+.main-content.no-nav {
+  padding-top: 0;
+  max-width: 100%;
+}
 
 /* ── Page Header ─────────────────────────────────────── */
 .page-header { margin-bottom: var(--space-xl); }
@@ -384,8 +390,9 @@ tbody tr:hover { background: rgba(79, 140, 255, 0.04); }
   margin-bottom: 5px;
 }
 [data-theme="light"] .page-header h1 {
-  background: linear-gradient(135deg, #0f172a 30%, var(--blue-primary) 100%);
+  background: linear-gradient(135deg, #1e293b 30%, #2563eb 100%);
   -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 .page-header p { color: var(--text-secondary); font-size: 0.9rem; }

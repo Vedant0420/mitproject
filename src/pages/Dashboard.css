@@ -48,7 +48,7 @@
 }
 .floor-bar-wrap {
   height: 6px;
-  background: rgba(255,255,255,0.06);
+  background: var(--bg-input);
   border-radius: 99px;
   overflow: hidden;
 }
@@ -120,7 +120,7 @@
 .breakdown-count { font-size: 0.875rem; font-weight: 700; }
 .breakdown-bar-wrap {
   height: 5px;
-  background: rgba(255,255,255,0.05);
+  background: var(--bg-input);
   border-radius: 99px;
   overflow: hidden;
 }
@@ -152,14 +152,14 @@
 }
 .quick-action-btn:hover {
   border-color: var(--qa-color, var(--border-strong));
-  background: rgba(255,255,255,0.04);
+  background: var(--bg-card-hover);
   transform: translateX(3px);
 }
 .qa-icon {
   width: 36px;
   height: 36px;
   border-radius: var(--radius-md);
-  background: rgba(255,255,255,0.05);
+  background: var(--bg-input);
   display: flex;
   align-items: center;
   justify-content: center;
