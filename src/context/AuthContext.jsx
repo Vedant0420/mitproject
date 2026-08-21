@@ -10,7 +10,7 @@ export const ALLOWED_DOMAIN = 'mitwpu.edu.in';
 // eslint-disable-next-line react-refresh/only-export-components
 export const ADMIN_EMAILS = [
   'vedant.khedkar@mitwpu.edu.in',
-  // add more admin emails here as needed
+  'admin.test@mitwpu.edu.in'
 ];
 
 // Roles:
