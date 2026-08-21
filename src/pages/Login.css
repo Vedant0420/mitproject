@@ -35,7 +35,7 @@
   pointer-events: none;
 }
 
-/* ── Top floating bar (on auth pages) ──────────────────── */
+/* ── Top floating bar (on auth pages) ──────────────── */
 .auth-topbar {
   position: fixed;
   top: 16px;
@@ -48,8 +48,8 @@
   background: var(--nav-bg);
   border: 1px solid var(--nav-border);
   border-radius: 999px;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
   box-shadow: var(--nav-shadow);
   z-index: 100;
 }

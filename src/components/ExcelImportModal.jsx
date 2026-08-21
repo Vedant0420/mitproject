@@ -3,11 +3,10 @@ import * as XLSX from 'xlsx';
 import { X, Upload, FileType, CheckCircle2, AlertTriangle, ArrowRight } from 'lucide-react';
 import { useApp } from '../context/AppContext.jsx';
 
-export default function ExcelImportModal({ onClose }) {
-  const { rooms, subjects, faculty, bulkCreateAllotments } = useApp();
+export default function ExcelImportModal({ mode = 'allotments', onClose }) {
+  const { rooms, subjects, faculty, bulkCreateAllotments, bulkCreateRooms, bulkCreateFaculty, bulkCreateSubjects } = useApp();
   
   const [file, setFile] = useState(null);
-  const [parsedData, setParsedData] = useState([]);
   const [validationResults, setValidationResults] = useState(null);
   const [isImporting, setIsImporting] = useState(false);
   
@@ -34,6 +33,7 @@ export default function ExcelImportModal({ onClose }) {
         setParsedData(jsonData);
         validateData(jsonData);
       } catch (err) {
+        console.error('Excel parse error:', err);
         alert("Failed to parse Excel file. Please ensure it is a valid format.");
       }
     };
@@ -49,48 +49,45 @@ export default function ExcelImportModal({ onClose }) {
     data.forEach((row, index) => {
       const rowNum = index + 2; // +1 for 0-index, +1 for header
       const errors = [];
+      let parsed = {};
       
-      // Helper to do case-insensitive matches
       const getMatch = (list, key, value) => 
         list.find(item => String(item[key]).toLowerCase() === String(value).toLowerCase());
 
-      const rName = row['Room'] || row['Room Name'];
-      const sName = row['Subject'] || row['Subject Name'];
-      const fName = row['Faculty'] || row['Faculty Name'];
-      const day = row['Day'];
-      const startTime = row['Start Time'] || row['StartTime'];
-      const endTime = row['End Time'] || row['EndTime'];
-      const section = row['Section'] || '';
+      if (mode === 'allotments') {
+        const rName = row['Room'] || row['Room Name'];
+        const sName = row['Subject'] || row['Subject Name'];
+        const fName = row['Faculty'] || row['Faculty Name'];
+        const day = row['Day'];
+        const startTime = row['Start Time'] || row['StartTime'];
+        const endTime = row['End Time'] || row['EndTime'];
+        const section = row['Section'] || '';
 
-      const matchedRoom = getMatch(rooms, 'name', rName);
-      const matchedSub = getMatch(subjects, 'name', sName);
-      const matchedFac = getMatch(faculty, 'name', fName);
+        const matchedRoom = getMatch(rooms, 'name', rName);
+        const matchedSub = getMatch(subjects, 'name', sName);
+        const matchedFac = getMatch(faculty, 'name', fName);
 
-      if (!rName) errors.push('Missing Room column');
-      else if (!matchedRoom) errors.push(`Room "${rName}" not found in database`);
+        if (!rName) errors.push('Missing Room column');
+        else if (!matchedRoom) errors.push(`Room "${rName}" not found in database`);
 
-      if (!sName) errors.push('Missing Subject column');
-      else if (!matchedSub) errors.push(`Subject "${sName}" not found in database`);
+        if (!sName) errors.push('Missing Subject column');
+        else if (!matchedSub) errors.push(`Subject "${sName}" not found in database`);
 
-      if (!fName) errors.push('Missing Faculty column');
-      else if (!matchedFac) errors.push(`Faculty "${fName}" not found in database`);
+        if (!fName) errors.push('Missing Faculty column');
+        else if (!matchedFac) errors.push(`Faculty "${fName}" not found in database`);
 
-      if (!day) errors.push('Missing Day column');
-      if (!startTime) errors.push('Missing Start Time column');
-      if (!endTime) errors.push('Missing End Time column');
+        if (!day) errors.push('Missing Day column');
+        if (!startTime) errors.push('Missing Start Time column');
+        if (!endTime) errors.push('Missing End Time column');
 
-      if (errors.length > 0) {
-        results.errors.push({ rowNum, errors });
-      } else {
-        // Validate time format (HH:MM)
-        const timeRegex = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/;
-        if (!timeRegex.test(startTime)) errors.push(`Invalid Start Time format (${startTime}). Use HH:MM`);
-        if (!timeRegex.test(endTime)) errors.push(`Invalid End Time format (${endTime}). Use HH:MM`);
-        
-        if (errors.length > 0) {
-          results.errors.push({ rowNum, errors });
-        } else {
-          results.validRows.push({
+        if (errors.length === 0) {
+          const timeRegex = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/;
+          if (!timeRegex.test(startTime)) errors.push(`Invalid Start Time format (${startTime}). Use HH:MM`);
+          if (!timeRegex.test(endTime)) errors.push(`Invalid End Time format (${endTime}). Use HH:MM`);
+        }
+
+        if (errors.length === 0) {
+          parsed = {
             roomId: matchedRoom.id,
             subjectId: matchedSub.id,
             facultyId: matchedFac.id,
@@ -98,8 +95,50 @@ export default function ExcelImportModal({ onClose }) {
             startTime: String(startTime).trim(),
             endTime: String(endTime).trim(),
             section: String(section).trim()
-          });
+          };
         }
+      } else if (mode === 'rooms') {
+        const name = row['Name'] || row['Room Name'];
+        const type = row['Type'] || 'classroom';
+        const capacity = row['Capacity'] || 0;
+        const floor = row['Floor'] || 1;
+        
+        if (!name) errors.push('Missing Name column');
+        if (getMatch(rooms, 'name', name)) errors.push(`Room "${name}" already exists`);
+        
+        parsed = { 
+          name: String(name), 
+          type: String(type).toLowerCase().replace(' ', '_'), 
+          capacity: parseInt(capacity) || 0, 
+          floor: parseInt(floor) || 1, 
+          status: 'available',
+          facilities: [] 
+        };
+      } else if (mode === 'faculty') {
+        const name = row['Name'] || row['Faculty Name'];
+        const dept = row['Department'] || '';
+        const email = row['Email'] || '';
+        
+        if (!name) errors.push('Missing Name column');
+        if (getMatch(faculty, 'name', name)) errors.push(`Faculty "${name}" already exists`);
+        
+        parsed = { name: String(name), department: String(dept), email: String(email), subjects: [] };
+      } else if (mode === 'subjects') {
+        const code = row['Code'] || row['Subject Code'];
+        const name = row['Name'] || row['Subject Name'];
+        const credits = row['Credits'] || 3;
+        
+        if (!code) errors.push('Missing Code column');
+        if (!name) errors.push('Missing Name column');
+        if (getMatch(subjects, 'code', code)) errors.push(`Subject code "${code}" already exists`);
+        
+        parsed = { code: String(code), name: String(name), credits: parseInt(credits) || 3 };
+      }
+
+      if (errors.length > 0) {
+        results.errors.push({ rowNum, errors });
+      } else {
+        results.validRows.push(parsed);
       }
     });
 
@@ -111,20 +150,35 @@ export default function ExcelImportModal({ onClose }) {
     
     setIsImporting(true);
     try {
-      await bulkCreateAllotments(validationResults.validRows);
-      onClose(); // Close modal on success
+      if (mode === 'allotments') await bulkCreateAllotments(validationResults.validRows);
+      else if (mode === 'rooms') await bulkCreateRooms(validationResults.validRows);
+      else if (mode === 'faculty') await bulkCreateFaculty(validationResults.validRows);
+      else if (mode === 'subjects') await bulkCreateSubjects(validationResults.validRows);
+      
+      onClose();
     } catch (e) {
       console.error(e);
       setIsImporting(false);
     }
   };
 
+  const getRequiredColumns = () => {
+    if (mode === 'rooms') return 'Name, Type, Capacity, Floor';
+    if (mode === 'faculty') return 'Name, Department, Email';
+    if (mode === 'subjects') return 'Code, Name, Credits';
+    return 'Room, Subject, Faculty, Day, Start Time, End Time';
+  };
+
+  const getTitle = () => {
+    return mode.charAt(0).toUpperCase() + mode.slice(1);
+  };
+
   return (
     <div className="modal-backdrop fade-in" onClick={onClose}>
       <div className="modal slide-in" onClick={e => e.stopPropagation()} style={{ maxWidth: '600px', width: '95%' }}>
         <div className="modal-header">
-          <h2><Upload size={20} /> Bulk Import Allotments</h2>
-          <button className="btn-icon" onClick={onClose}><X size={20} /></button>
+          <h2><Upload size={20} /> Bulk Import {getTitle()}</h2>
+          <button className="btn-icon" onClick={onClose} aria-label="Close"><X size={20} /></button>
         </div>
         
         <div className="modal-body" style={{ maxHeight: '70vh', overflowY: 'auto' }}>
@@ -143,11 +197,11 @@ export default function ExcelImportModal({ onClose }) {
                 marginTop: '10px'
               }}
             >
-              <FileType size={48} color="var(--primary)" style={{ marginBottom: '16px' }}/>
+              <FileType size={48} color="var(--blue-primary)" style={{ marginBottom: '16px', margin: '0 auto' }}/>
               <h3>Upload Excel File</h3>
               <p className="text-muted">Supports .xlsx and .csv</p>
               <p className="text-sm text-muted" style={{ marginTop: '10px' }}>
-                Required Columns: Room, Subject, Faculty, Day, Start Time, End Time
+                Required Columns: {getRequiredColumns()}
               </p>
               <input 
                 type="file" 

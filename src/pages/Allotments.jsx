@@ -5,8 +5,10 @@ import { DAYS, TIME_SLOTS, SEMESTERS, FLOORS, FLOOR_LABELS } from '../utils/cons
 import { checkConflict, formatTimeRange } from '../utils/helpers.js';
 import { nanoid } from '../utils/nanoid.js';
 import {
-  Plus, Pencil, Trash2, Search, CalendarCheck, AlertTriangle
+  Plus, Pencil, Trash2, Search, CalendarCheck, AlertTriangle, Upload, Download
 } from 'lucide-react';
+import { exportToExcel } from '../utils/excel.js';
+import ExcelImportModal from '../components/ExcelImportModal.jsx';
 import './Allotments.css';
 
 const EMPTY = {
@@ -17,7 +19,7 @@ const EMPTY = {
 
 function AllotmentForm({ value, onChange, rooms, subjects, faculty, allotments, editId }) {
   const conflict = value.roomId && value.day && value.startTime && value.endTime &&
-    checkConflict(allotments, value.roomId, value.day, value.startTime, value.endTime, editId);
+    checkConflict(allotments, value.roomId, value.facultyId, value.day, value.startTime, value.endTime, editId);
 
   const filterFloor = useState('all');
   const filteredRooms = filterFloor[0] === 'all'
@@ -29,7 +31,7 @@ function AllotmentForm({ value, onChange, rooms, subjects, faculty, allotments, 
       {conflict && (
         <div className="conflict-alert">
           <AlertTriangle size={16} />
-          <span>Conflict detected! This room is already booked at this time.</span>
+          <span>{conflict.message}</span>
         </div>
       )}
 
@@ -164,6 +166,7 @@ export default function Allotments() {
   const [filterDay, setFilterDay]       = useState('all');
   const [filterRoom, setFilterRoom]     = useState('all');
   const [modalOpen, setModalOpen]       = useState(false);
+  const [importModal, setImportModal] = useState(false);
   const [editing, setEditing]           = useState(null);
   const [form, setForm]                 = useState({ ...EMPTY });
   const [saving, setSaving]             = useState(false);
@@ -187,8 +190,8 @@ export default function Allotments() {
   const openCreate = () => { setEditing(null); setForm({ ...EMPTY }); setModalOpen(true); };
   const openEdit   = (a) => { setEditing(a); setForm({ ...a }); setModalOpen(true); };
 
-  const hasConflict = form.roomId && form.day && form.startTime && form.endTime &&
-    checkConflict(allotments, form.roomId, form.day, form.startTime, form.endTime, editing?.id);
+  const conflict = form.roomId && form.day && form.startTime && form.endTime &&
+    checkConflict(allotments, form.roomId, form.facultyId, form.day, form.startTime, form.endTime, editing?.id);
 
   const handleSave = async () => {
     if (!form.roomId || !form.subjectId || !form.facultyId) return;
@@ -212,9 +215,17 @@ export default function Allotments() {
           <h1><CalendarCheck size={28} style={{ verticalAlign: 'middle' }} /> Allotments</h1>
           <p>Assign subjects, faculty, and time slots to rooms</p>
         </div>
-        <button id="add-allotment-btn" className="btn btn-primary" onClick={openCreate}>
-          <Plus size={18} /> New Allotment
-        </button>
+        <div style={{ display: 'flex', gap: '8px' }}>
+          <button className="btn btn-secondary" onClick={() => setImportModal(true)}>
+            <Upload size={18} /> Import
+          </button>
+          <button className="btn btn-secondary" onClick={() => exportToExcel(filtered, 'Allotments', 'Allotments_Export')}>
+            <Download size={18} /> Export
+          </button>
+          <button id="add-allotment-btn" className="btn btn-primary" onClick={openCreate}>
+            <Plus size={18} /> New Allotment
+          </button>
+        </div>
       </div>
 
       {/* Filters */}
@@ -303,10 +314,10 @@ export default function Allotments() {
                     </td>
                     <td>
                       <div style={{ display: 'flex', gap: 6 }}>
-                        <button className="btn-icon" title="Edit" onClick={() => openEdit(a)}>
+                        <button className="btn-icon" title="Edit" aria-label="Edit allotment" onClick={() => openEdit(a)}>
                           <Pencil size={15} />
                         </button>
-                        <button className="btn-icon" title="Delete" onClick={() => setConfirmDelete(a)}
+                        <button className="btn-icon" title="Delete" aria-label="Delete allotment" onClick={() => setConfirmDelete(a)}
                           style={{ color: 'var(--rose)' }}>
                           <Trash2 size={15} />
                         </button>
@@ -341,10 +352,10 @@ export default function Allotments() {
           <button
             id="save-allotment-btn"
             className="btn btn-primary"
+            disabled={saving || !!conflict || !form.roomId || !form.subjectId || !form.facultyId}
             onClick={handleSave}
-            disabled={saving || !form.roomId || !form.subjectId || !form.facultyId || hasConflict}
           >
-            {saving ? 'Saving…' : editing ? 'Update Allotment' : 'Create Allotment'}
+            {saving ? 'Saving...' : 'Save Allotment'}
           </button>
         </div>
       </Modal>
@@ -365,6 +376,13 @@ export default function Allotments() {
           </button>
         </div>
       </Modal>
+
+      {importModal && (
+        <ExcelImportModal
+          mode="allotments"
+          onClose={() => setImportModal(false)}
+        />
+      )}
     </div>
   );
 }

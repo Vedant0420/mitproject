@@ -17,13 +17,32 @@ export function formatTimeRange(start, end) {
   return `${formatTime(start)} – ${formatTime(end)}`;
 }
 
-export function checkConflict(allotments, roomId, day, startTime, endTime, excludeId = null) {
-  return allotments.some(a => {
+export function checkConflict(allotments, roomId, facultyId, day, startTime, endTime, excludeId = null) {
+  const overlap = allotments.find(a => {
     if (a.id === excludeId) return false;
-    if (a.roomId !== roomId || a.day !== day) return false;
-    // overlap check
-    return startTime < a.endTime && endTime > a.startTime;
+    if (a.day !== day) return false;
+    
+    // Check if times overlap
+    const timeOverlap = startTime < a.endTime && endTime > a.startTime;
+    if (!timeOverlap) return false;
+
+    // Check if same room or same faculty
+    if (a.roomId === roomId) return true;
+    if (a.facultyId === facultyId) return true;
+
+    return false;
   });
+
+  if (!overlap) return null;
+
+  if (overlap.roomId === roomId) {
+    return { type: 'room', message: 'Room is already occupied during this time.' };
+  }
+  if (overlap.facultyId === facultyId) {
+    return { type: 'faculty', message: 'Faculty is already scheduled for another class at this time.' };
+  }
+  
+  return { type: 'unknown', message: 'Time conflict detected.' };
 }
 
 export function getRoomTypeLabel(type) {

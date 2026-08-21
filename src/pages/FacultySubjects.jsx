@@ -3,7 +3,8 @@ import { useApp } from '../context/AppContext.jsx';
 import Modal from '../components/Modal.jsx';
 import { DEPARTMENTS } from '../utils/constants.js';
 import { nanoid } from '../utils/nanoid.js';
-import { Plus, Pencil, Trash2, Users, BookOpen, Search } from 'lucide-react';
+import { Plus, Pencil, Trash2, Users, BookOpen, Search, Upload, Download } from 'lucide-react';
+import { exportToExcel } from '../utils/excel.js';
 import './FacultySubjects.css';
 
 const EMPTY_FAC = { name: '', department: '', email: '', subjects: [] };
@@ -76,7 +77,13 @@ export default function FacultySubjects() {
           <h1><Users size={28} style={{ verticalAlign: 'middle' }} /> Faculty & Subjects</h1>
           <p>Manage faculty members, departments, and subjects</p>
         </div>
-        <div className="page-actions">
+        <div className="page-actions" style={{ display: 'flex', gap: '8px' }}>
+          <button className="btn btn-secondary" onClick={() => setImportModal(true)}>
+            <Upload size={18} /> Import
+          </button>
+          <button className="btn btn-secondary" onClick={() => exportToExcel(tab === 'faculty' ? filteredFac : filteredSub, tab === 'faculty' ? 'Faculty' : 'Subjects', tab === 'faculty' ? 'Faculty_Export' : 'Subjects_Export')}>
+            <Download size={18} /> Export
+          </button>
           {tab === 'faculty' && (
             <button id="add-faculty-btn" className="btn btn-primary" onClick={openCreateFac}>
               <Plus size={18} /> Add Faculty
@@ -159,8 +166,8 @@ export default function FacultySubjects() {
                     </td>
                     <td>
                       <div style={{ display:'flex', gap:6 }}>
-                        <button className="btn-icon" onClick={() => openEditFac(f)}><Pencil size={15} /></button>
-                        <button className="btn-icon" onClick={() => setConfirmFac(f)} style={{ color:'var(--rose)' }}>
+                        <button className="btn-icon" onClick={() => openEditFac(f)} aria-label="Edit faculty" title="Edit"><Pencil size={15} /></button>
+                        <button className="btn-icon" onClick={() => setConfirmFac(f)} style={{ color:'var(--rose)' }} aria-label="Delete faculty" title="Delete">
                           <Trash2 size={15} />
                         </button>
                       </div>
@@ -205,8 +212,8 @@ export default function FacultySubjects() {
                     </td>
                     <td>
                       <div style={{ display:'flex', gap:6 }}>
-                        <button className="btn-icon" onClick={() => openEditSub(s)}><Pencil size={15} /></button>
-                        <button className="btn-icon" onClick={() => setConfirmSub(s)} style={{ color:'var(--rose)' }}>
+                        <button className="btn-icon" onClick={() => openEditSub(s)} aria-label="Edit subject" title="Edit"><Pencil size={15} /></button>
+                        <button className="btn-icon" onClick={() => setConfirmSub(s)} style={{ color:'var(--rose)' }} aria-label="Delete subject" title="Delete">
                           <Trash2 size={15} />
                         </button>
                       </div>

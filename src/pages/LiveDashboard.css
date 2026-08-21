@@ -127,3 +127,31 @@
   0%, 100% { opacity: 1; transform: scale(1); }
   50% { opacity: 0.4; transform: scale(0.85); }
 }
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .ld-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .ld-grid { grid-template-columns: 1fr; }
+  .ld-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 480px) {
+  .ld-stats { gap: var(--space-sm); }
+  .ld-stat  { padding: 14px; }
+  .ld-stat-val { font-size: 1.5rem; }
+  .ld-item {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .ld-cancel-btn {
+    margin-left: auto;
+    margin-top: 4px;
+  }
+  .ld-card { padding: var(--space-md); }
+}
+

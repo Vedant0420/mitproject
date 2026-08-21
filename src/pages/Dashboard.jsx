@@ -8,9 +8,9 @@ import { FLOOR_LABELS, FLOORS } from '../utils/constants.js';
 import { formatTimeRange } from '../utils/helpers.js';
 import './Dashboard.css';
 
-function StatCard({ icon: Icon, label, value, color, bg }) {
+function StatCard({ icon: Icon, label, value, color, bg, accGlow }) {
   return (
-    <div className="card stat-card card-lift" style={{ '--accent': color }}>
+    <div className="card stat-card card-lift" style={{ '--acc': color, '--acc-glow': accGlow }}>
       <div className="stat-icon" style={{ background: bg }}>
         <Icon size={22} color={color} />
       </div>
@@ -43,20 +43,36 @@ export default function Dashboard() {
 
   return (
     <div className="fade-in">
-      {/* Header */}
-      <div className="page-header">
-        <h1>Vyas Building</h1>
-        <p>Classroom Allotment Management System — 8 Floors Overview</p>
+      {/* Hero */}
+      <div className="page-hero">
+        <div className="page-hero-row">
+          <div>
+            <div className="page-hero-badge">
+              <Building2 size={11} />
+              MIT-WPU · Vyas Building
+            </div>
+            <h1>Classroom Allotment</h1>
+            <p>Room scheduling &amp; management — {rooms.length} rooms across 8 floors</p>
+          </div>
+          <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+            <button className="btn btn-secondary btn-sm" onClick={() => navigate('/rooms')}>
+              <DoorOpen size={14} /> Manage Rooms
+            </button>
+            <button className="btn btn-primary btn-sm" onClick={() => navigate('/allotments')}>
+              <CalendarCheck size={14} /> New Allotment
+            </button>
+          </div>
+        </div>
       </div>
 
       {/* Stats */}
       <div className="stats-grid">
-        <StatCard icon={DoorOpen}      label="Total Rooms"   value={rooms.length}    color="var(--blue-primary)" bg="rgba(79,140,255,0.12)" />
-        <StatCard icon={FlaskConical}  label="Labs"          value={labs.length}     color="var(--teal)"         bg="rgba(0,212,170,0.12)" />
-        <StatCard icon={CheckCircle}   label="Available"     value={available.length}color="var(--teal)"         bg="rgba(0,212,170,0.12)" />
-        <StatCard icon={AlertCircle}   label="Occupied"      value={occupied.length} color="var(--rose)"         bg="rgba(255,107,107,0.12)" />
-        <StatCard icon={CalendarCheck} label="Allotments"    value={allotments.length} color="var(--amber)"     bg="rgba(255,179,71,0.12)" />
-        <StatCard icon={Users}         label="Faculty"       value={faculty.length}  color="var(--purple)"       bg="rgba(180,122,255,0.12)" />
+        <StatCard icon={DoorOpen}      label="Total Rooms"   value={rooms.length}       color="var(--blue-primary)" accGlow="rgba(79,140,255,0.1)"   bg="rgba(79,140,255,0.12)" />
+        <StatCard icon={FlaskConical}  label="Labs"          value={labs.length}        color="var(--teal)"         accGlow="rgba(0,212,170,0.1)"   bg="rgba(0,212,170,0.12)" />
+        <StatCard icon={CheckCircle}   label="Available"     value={available.length}   color="var(--teal)"         accGlow="rgba(0,212,170,0.1)"   bg="rgba(0,212,170,0.12)" />
+        <StatCard icon={AlertCircle}   label="Occupied"      value={occupied.length}    color="var(--rose)"         accGlow="rgba(255,107,107,0.1)" bg="rgba(255,107,107,0.12)" />
+        <StatCard icon={CalendarCheck} label="Allotments"    value={allotments.length}  color="var(--amber)"        accGlow="rgba(255,179,71,0.1)"  bg="rgba(255,179,71,0.12)" />
+        <StatCard icon={Users}         label="Faculty"       value={faculty.length}     color="var(--purple)"       accGlow="rgba(180,122,255,0.1)" bg="rgba(180,122,255,0.12)" />
       </div>
 
       <div className="dashboard-grid">

@@ -124,7 +124,34 @@
   font-weight: 700;
   color: var(--text-primary);
   margin-bottom: var(--space-sm);
-  padding-left: 4px;
   border-left: 3px solid var(--blue-primary);
   padding-left: 10px;
 }
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .timetable-selector {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .timetable-selector .form-select,
+  .timetable-selector .form-input {
+    max-width: 100%;
+  }
+  .tt-mode-tabs {
+    width: 100%;
+    justify-content: stretch;
+  }
+  .tt-mode-tab { flex: 1; }
+}
+
+@media (max-width: 480px) {
+  .tt-th-day   { padding: 8px 4px; font-size: 0.65rem; }
+  .tt-th-time  { width: 60px; padding: 8px 6px; font-size: 0.62rem; }
+  .tt-time-cell { padding: 5px 5px; font-size: 0.65rem; width: 60px; }
+  .tt-cell     { min-width: 80px; }
+  .tt-slot     { padding: 4px 5px; font-size: 0.68rem; }
+  .tt-slot-subject { font-size: 0.68rem; }
+  .tt-slot-meta    { font-size: 0.62rem; }
+}
+

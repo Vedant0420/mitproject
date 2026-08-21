@@ -33,8 +33,8 @@
   --purple-glow:    rgba(180, 122, 255, 0.20);
 
   --text-primary:   #e8eeff;
-  --text-secondary: rgba(200, 215, 255, 0.65);
-  --text-muted:     rgba(150, 170, 220, 0.45);
+  --text-secondary: rgba(220, 230, 255, 0.85);
+  --text-muted:     rgba(180, 195, 235, 0.65);
   --text-inverse:   #080c1f;
 
   --color-classroom:  #4f8cff;
@@ -181,14 +181,17 @@ a:hover { color: var(--text-primary); }
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   transition: border-color var(--dur-norm) var(--ease-out),
               box-shadow   var(--dur-norm) var(--ease-out),
               transform    var(--dur-norm) var(--ease-out);
 }
-.card:hover { border-color: var(--border-strong); }
-.card-lift:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.card:hover {
+  border-color: var(--border-strong);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.15);
+}
+.card-lift:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
 .card-glow:hover { box-shadow: var(--shadow-blue); }
 
 /* ── Buttons ─────────────────────────────────────────── */
@@ -308,6 +311,16 @@ a:hover { color: var(--text-primary); }
 }
 .form-hint { font-size: 0.75rem; color: var(--text-muted); margin-top: 3px; }
 
+/* ── Table ───────────────────────────────────────────── */
+.table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+}
+/* Compact table on mobile — just override if needed */
+
 /* ── Badges ──────────────────────────────────────────── */
 .badge {
   display: inline-flex;
@@ -370,19 +383,82 @@ tbody tr:hover { background: rgba(79, 140, 255, 0.04); }
   width: 100%;
   max-width: 1400px;
   margin: 0 auto;
-  padding: 28px 32px 48px;
+  /* floating navbar: top:16px + 52px height + 20px gap = 88px */
+  padding: 88px 32px 64px;
   min-height: 100vh;
 }
-/* When user is logged in, the Navbar renders a spacer div already */
-/* So main-content only needs its normal padding */
+/* No navbar on login/signup pages */
 .main-content.no-nav {
   padding-top: 0;
   max-width: 100%;
 }
 
+/* ── Page Hero ───────────────────────────────────────── */
+.page-hero {
+  padding: 28px 32px 24px;
+  margin: -88px -32px 32px;
+  border-bottom: 1px solid var(--border-subtle);
+  background: linear-gradient(180deg,
+    rgba(79, 140, 255, 0.04) 0%,
+    transparent 100%);
+  padding-top: calc(88px + 28px);
+}
+[data-theme="light"] .page-hero {
+  background: linear-gradient(180deg,
+    rgba(37, 99, 235, 0.04) 0%,
+    transparent 100%);
+}
+.page-hero h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--text-primary) 40%, var(--blue-light) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.15;
+  margin-bottom: 6px;
+  letter-spacing: -0.5px;
+}
+[data-theme="light"] .page-hero h1 {
+  background: linear-gradient(135deg, #0f172a 30%, #2563eb 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.page-hero p {
+  color: var(--text-secondary);
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+.page-hero-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+}
+.page-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background: rgba(79, 140, 255, 0.1);
+  border: 1px solid rgba(79, 140, 255, 0.25);
+  color: var(--blue-primary);
+  margin-bottom: 10px;
+}
+
 /* ── Page Header ─────────────────────────────────────── */
 .page-header { margin-bottom: var(--space-xl); }
 .page-header h1 {
+  font-size: 1.75rem;
+  font-weight: 800;
+  letter-spacing: -0.4px;
   background: linear-gradient(135deg, var(--text-primary) 30%, var(--blue-light) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -395,7 +471,7 @@ tbody tr:hover { background: rgba(79, 140, 255, 0.04); }
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
-.page-header p { color: var(--text-secondary); font-size: 0.9rem; }
+.page-header p { color: var(--text-secondary); font-size: 0.88rem; line-height: 1.6; }
 .page-header-row {
   display: flex;
   justify-content: space-between;
@@ -420,31 +496,51 @@ tbody tr:hover { background: rgba(79, 140, 255, 0.04); }
   gap: var(--space-sm);
   position: relative;
   overflow: hidden;
+  cursor: default;
 }
+/* Top accent bar */
 .stat-card::before {
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0;
-  height: 2px;
+  height: 3px;
   background: var(--acc, var(--blue-primary));
-  opacity: 0.7;
+  opacity: 0.85;
+}
+/* Subtle ambient glow behind icon */
+.stat-card::after {
+  content: '';
+  position: absolute;
+  top: -20px;
+  right: -20px;
+  width: 100px;
+  height: 100px;
+  background: radial-gradient(circle, var(--acc-glow, rgba(79,140,255,0.08)) 0%, transparent 70%);
+  pointer-events: none;
 }
 .stat-card .stat-icon {
-  width: 42px; height: 42px;
+  width: 44px;
+  height: 44px;
   border-radius: var(--radius-md);
-  display: flex; align-items: center; justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
 }
 .stat-card .stat-value {
-  font-size: 2rem;
+  font-size: 2.1rem;
   font-weight: 800;
   font-family: var(--font-mono);
   line-height: 1;
-  letter-spacing: -1px;
+  letter-spacing: -1.5px;
+  color: var(--text-primary);
 }
 .stat-card .stat-label {
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   color: var(--text-secondary);
   font-weight: 500;
+  letter-spacing: 0.01em;
 }
 
 /* ── Filter Bar ──────────────────────────────────────── */
@@ -583,10 +679,89 @@ tbody tr:hover { background: rgba(79, 140, 255, 0.04); }
 .toast-error   { background: rgba(255,107,107,0.14); border-color: rgba(255,107,107,0.28); color: var(--rose); }
 .toast-info    { background: rgba(79,140,255,0.14); border-color: rgba(79,140,255,0.28); color: var(--blue-light); }
 
-/* ── Responsive ──────────────────────────────────────── */
+/* ── Responsive (global) ──────────────────────────────────────── */
 @media (max-width: 768px) {
-  .main-content { padding: 16px 16px 32px; }
+  /* floating navbar on mobile: top:10px + ~44px height + 16px gap = ~70px */
+  .main-content { padding: 78px 16px 40px; }
+  .page-hero { padding: 12px 16px 16px; margin: -78px -16px 24px; padding-top: calc(78px + 12px); }
+
+  /* Page header row stacks vertically */
+  .page-header-row { flex-direction: column; }
+  .page-actions { width: 100%; }
+  .page-actions .btn { flex: 1; justify-content: center; }
+
+  /* Filter bar: inputs go full width */
+  .filter-bar { flex-direction: column; align-items: stretch; }
+  .filter-bar .form-input,
+  .filter-bar .form-select { max-width: 100%; }
+
+  /* Dashboard grid single column */
+  .dashboard-grid { grid-template-columns: 1fr !important; }
+
+  /* Form rows collapse */
+  .form-row { grid-template-columns: 1fr !important; }
+
+  /* Admin floor util row collapses */
+  .util-floor-row { grid-template-columns: 1fr auto; }
+  .util-stacked-bar { grid-column: 1 / -1; }
+
+  /* Floor map tabs wrap and compress */
+  .fm-floor-tabs { gap: 3px; }
+  .fm-floor-tab { padding: 4px 9px; font-size: 0.72rem; }
+  .fm-header { flex-direction: column; align-items: flex-start; }
+  .fm-content.has-panel { grid-template-columns: 1fr; }
+
+  /* Stat cards value sizing */
+  .stat-card .stat-value { font-size: 1.6rem; }
+
+  /* Live dashboard grid */
+  .ld-grid { grid-template-columns: 1fr !important; }
+
+  /* Timetable mode tabs full width */
+  .tt-mode-tabs { width: 100%; }
+  .tt-mode-tab { flex: 1; text-align: center; padding: 8px 10px; }
+
+  /* Faculty/Subject tabs full width */
+  .fs-tabs { width: 100%; }
+  .fs-tab { flex: 1; justify-content: center; padding: 8px 12px; }
+
+  /* Page hero simplified */
+  .page-hero-row { flex-direction: column; align-items: flex-start; }
+  .page-hero h1 { font-size: 1.5rem; }
 }
+
 @media (max-width: 480px) {
+  .main-content { padding: 74px 12px 32px; }
   .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .page-hero { margin: -74px -12px 20px; padding-top: calc(74px + 12px); }
+
+  /* Stat cards even smaller */
+  .stat-card { padding: 14px; }
+  .stat-card .stat-value { font-size: 1.4rem; }
+  .stat-card .stat-icon { width: 36px; height: 36px; }
+
+  /* Page header text smaller */
+  .page-header h1 { font-size: 1.4rem; }
+  .page-hero h1 { font-size: 1.25rem; }
+
+  /* Admin room grid 1 column */
+  .admin-room-grid { grid-template-columns: 1fr !important; padding: var(--space-md); }
+
+  /* Allotment feed single column */
+  .allot-feed-grid { grid-template-columns: 1fr !important; }
+
+  /* Floor overview breakdown 1-col */
+  .floor-row { grid-template-columns: 110px 1fr 70px; }
+
+  /* Nav icon buttons smaller */
+  .nav-icon-btn { width: 28px; height: 28px; }
+
+  /* Quick action btn text smaller */
+  .quick-action-btn { font-size: 0.82rem; padding: 11px 12px; }
+
+  /* Badge compact */
+  .badge { padding: 2px 7px; font-size: 0.68rem; }
+
+  /* Table: smaller padding */
+  td, th { padding: 8px 10px; font-size: 0.8rem; }
 }

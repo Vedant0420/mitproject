@@ -7,6 +7,8 @@
   border-radius: var(--radius-lg);
   padding: 5px;
   width: fit-content;
+  max-width: 100%;
+  overflow-x: auto;
 }
 .fs-tab {
   display: flex;
@@ -22,9 +24,17 @@
   cursor: pointer;
   transition: all var(--dur-fast) var(--ease-out);
   font-family: var(--font-sans);
+  white-space: nowrap;
 }
 .fs-tab:hover  { color: var(--text-primary); }
 .fs-tab.active {
   background: linear-gradient(135deg, rgba(79,140,255,0.2), rgba(79,140,255,0.08));
   color: var(--blue-light);
 }
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .fs-tabs { width: 100%; }
+  .fs-tab  { flex: 1; justify-content: center; padding: 8px 10px; font-size: 0.82rem; }
+}
+

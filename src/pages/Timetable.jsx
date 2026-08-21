@@ -2,7 +2,7 @@ import { useState, useRef } from 'react';
 import { useApp } from '../context/AppContext.jsx';
 import { DAYS, TIME_SLOTS, FLOORS, FLOOR_LABELS } from '../utils/constants.js';
 import { formatTime } from '../utils/helpers.js';
-import { Clock, Printer, ChevronDown } from 'lucide-react';
+import { Clock, Printer } from 'lucide-react';
 import html2canvas from 'html2canvas';
 import './Timetable.css';
 

@@ -33,7 +33,7 @@ export default function Signup() {
 
     setLoading(true);
     await new Promise(r => setTimeout(r, 400));
-    const result = register(name, email, password);
+    const result = await register(name, email, password);
     setLoading(false);
 
     if (result.success) {

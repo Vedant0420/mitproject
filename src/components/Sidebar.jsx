@@ -11,7 +11,7 @@ import { FLOORS, FLOOR_LABELS } from '../utils/constants.js';
 import './Sidebar.css';
 
 export default function Navbar() {
-  const { currentUser, isAdmin, isViewer, logout } = useAuth();
+  const { currentUser, isAdmin, logout } = useAuth();
   const { theme, toggle }                = useTheme();
   const navigate                         = useNavigate();
   const [floorOpen, setFloorOpen]        = useState(false);
@@ -182,6 +182,7 @@ export default function Navbar() {
             <button
               className="nav-logout"
               onClick={handleLogout}
+              aria-label="Sign out"
               title="Sign Out"
             >
               <LogOut size={13} />
@@ -189,9 +190,6 @@ export default function Navbar() {
           </div>
         </div>
       </nav>
-
-      {/* Spacer so content doesn't hide under fixed navbar */}
-      <div className="navbar-spacer" />
     </>
   );
 }

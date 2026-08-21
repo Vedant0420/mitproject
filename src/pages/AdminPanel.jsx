@@ -3,13 +3,12 @@ import { useApp } from '../context/AppContext.jsx';
 import { useNavigate } from 'react-router-dom';
 import {
   ShieldCheck, DoorOpen, FlaskConical, CalendarCheck,
-  Users, CheckCircle, AlertCircle, Wrench, Search,
-  ChevronDown, Eye, Pencil, LayoutGrid, List,
-  Building2, Clock, BookOpen, ArrowRight
+  CheckCircle, AlertCircle, Wrench, Search,
+  ChevronDown, Eye, LayoutGrid, List,
+  Building2, Clock, ArrowRight
 } from 'lucide-react';
 import { FLOORS, FLOOR_LABELS, ROOM_TYPES, ROOM_STATUSES } from '../utils/constants.js';
 import { formatTimeRange, getRoomTypeColor } from '../utils/helpers.js';
-import { api } from '../utils/api.js';
 import './AdminPanel.css';
 
 // ── Status icon helper ─────────────────────────────────
@@ -85,6 +84,7 @@ export default function AdminPanel() {
     try {
       await updateRoom(room.id, { ...room, status: newStatus });
     } catch (e) {
+      console.error('Failed to update status:', e);
       toast('Failed to update status', 'error');
     }
   };
@@ -96,8 +96,7 @@ export default function AdminPanel() {
     return map;
   }, [filtered]);
 
-  // ── Currently allotted rooms (any allotment exists) ──
-  const allottedRoomIds = useMemo(() => new Set(allotments.map(a => a.roomId)), [allotments]);
+  // ── (removed unused allottedRoomIds) ──
 
   return (
     <div className="fade-in">
@@ -264,7 +263,6 @@ export default function AdminPanel() {
                   <div className="admin-room-grid">
                     {fRooms.map(room => {
                       const roomAllots = getRoomAllotments(room.id);
-                      const hasAllot   = allottedRoomIds.has(room.id);
                       const typeColor  = getRoomTypeColor(room.type);
                       return (
                         <div
@@ -292,7 +290,6 @@ export default function AdminPanel() {
                             <div className="arc-allots">
                               {roomAllots.slice(0, 3).map(a => {
                                 const sub = subjects.find(s => s.id === a.subjectId);
-                                const fac = faculty.find(f => f.id === a.facultyId);
                                 return (
                                   <div key={a.id} className="arc-allot-row">
                                     <span className="arc-day">{a.day.slice(0,3)}</span>

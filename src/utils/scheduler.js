@@ -51,7 +51,7 @@ export function autoGenerateTimetable(requirements, rooms, existingAllotments = 
 
           // Find an available room
           const availableRoom = rooms.find(room => {
-            return !checkConflict(allotments, room.id, day, startTime, endTime, null);
+            return !checkConflict(allotments, room.id, req.facultyId, day, startTime, endTime, null);
           });
 
           if (availableRoom) {

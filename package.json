@@ -5,14 +5,16 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "server": "json-server --watch db.json --port 3001",
-    "dev:all": "concurrently \"npm run server\" \"npm run dev\"",
+    "dev:all": "vite",
     "build": "vite build",
     "lint": "oxlint",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.112.3",
     "concurrently": "^10.0.4",
+    "dotenv": "^17.4.2",
+    "exceljs": "^4.4.0",
     "framer-motion": "^13.1.0",
     "html2canvas": "^1.4.1",
     "json-server": "^1.0.0-beta.15",
@@ -21,8 +23,7 @@
     "react-dom": "^19.2.8",
     "react-hot-toast": "^2.6.0",
     "react-router-dom": "^7.18.2",
-    "recharts": "^3.10.1",
-    "xlsx": "^0.18.5"
+    "recharts": "^3.10.1"
   },
   "devDependencies": {
     "@types/react": "^19.2.17",

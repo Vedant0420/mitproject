@@ -1,10 +1,13 @@
 import { useState } from 'react';
 import { useApp } from '../context/AppContext.jsx';
+import { useAuth } from '../context/AuthContext.jsx';
 import Modal from '../components/Modal.jsx';
 import { FLOORS, FLOOR_LABELS, ROOM_TYPES, ROOM_STATUSES, FACILITIES } from '../utils/constants.js';
 import { nanoid } from '../utils/nanoid.js';
 import { getRoomTypeColor } from '../utils/helpers.js';
-import { Plus, Pencil, Trash2, Search, Filter, DoorOpen } from 'lucide-react';
+import { Plus, Pencil, Trash2, Search, DoorOpen, Upload, Download } from 'lucide-react';
+import { exportToExcel } from '../utils/excel.js';
+import ExcelImportModal from '../components/ExcelImportModal.jsx';
 import './RoomManagement.css';
 
 const EMPTY_ROOM = {
@@ -109,11 +112,13 @@ function RoomForm({ value, onChange }) {
 
 export default function RoomManagement() {
   const { rooms, createRoom, updateRoom, deleteRoom } = useApp();
+  const { isAdmin } = useAuth();
   const [search, setSearch]       = useState('');
   const [filterFloor, setFilterFloor] = useState('all');
   const [filterType, setFilterType]   = useState('all');
   const [filterStatus, setFilterStatus] = useState('all');
   const [modalOpen, setModalOpen] = useState(false);
+  const [importModal, setImportModal] = useState(false);
   const [editing, setEditing]     = useState(null);
   const [form, setForm]           = useState({ ...EMPTY_ROOM });
   const [saving, setSaving]       = useState(false);
@@ -159,9 +164,21 @@ export default function RoomManagement() {
           <h1><DoorOpen size={28} style={{ verticalAlign: 'middle' }} /> Rooms</h1>
           <p>Manage classrooms and labs across all 8 floors of Vyas Building</p>
         </div>
-        <button id="add-room-btn" className="btn btn-primary" onClick={openCreate}>
-          <Plus size={18} /> Add Room
-        </button>
+        <div style={{ display: 'flex', gap: '8px' }}>
+          {isAdmin && (
+            <button className="btn btn-secondary" onClick={() => setImportModal(true)}>
+              <Upload size={18} /> Import
+            </button>
+          )}
+          <button className="btn btn-secondary" onClick={() => exportToExcel(filtered, 'Rooms', 'Rooms_Export')}>
+            <Download size={18} /> Export
+          </button>
+          {isAdmin && (
+            <button id="add-room-btn" className="btn btn-primary" onClick={openCreate}>
+              <Plus size={18} /> New Room
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Filter bar */}
@@ -214,46 +231,49 @@ export default function RoomManagement() {
               </tr>
             </thead>
             <tbody>
-              {filtered.map(room => (
-                <tr key={room.id}>
+              {filtered.map(r => (
+                <tr key={r.id}>
                   <td>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                       <span
                         style={{
                           width: 10, height: 10, borderRadius: '50%', flexShrink: 0,
-                          background: getRoomTypeColor(room.type),
+                          background: getRoomTypeColor(r.type),
                         }}
                       />
-                      <strong>{room.name}</strong>
+                      <strong>{r.name}</strong>
                     </div>
                   </td>
                   <td>
                     <span className="font-mono" style={{ fontSize: '0.82rem' }}>
-                      F{room.floor} — {FLOOR_LABELS[room.floor]}
+                      F{r.floor} — {FLOOR_LABELS[r.floor]}
                     </span>
                   </td>
-                  <td><span className={`badge badge-${room.type}`}>{ROOM_TYPES.find(t=>t.value===room.type)?.label}</span></td>
-                  <td className="font-mono">{room.capacity}</td>
+                  <td><span className={`badge badge-${r.type}`}>{ROOM_TYPES.find(t=>t.value===r.type)?.label}</span></td>
+                  <td className="font-mono">{r.capacity}</td>
                   <td>
                     <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', maxWidth: 260 }}>
-                      {(room.facilities || []).slice(0, 3).map(f => (
+                      {(r.facilities || []).slice(0, 3).map(f => (
                         <span key={f} className="chip">{f}</span>
                       ))}
-                      {(room.facilities || []).length > 3 && (
-                        <span className="chip">+{room.facilities.length - 3}</span>
+                      {(r.facilities || []).length > 3 && (
+                        <span className="chip">+{r.facilities.length - 3}</span>
                       )}
                     </div>
                   </td>
-                  <td><span className={`badge badge-${room.status}`}>{room.status}</span></td>
+                  <td><span className={`badge badge-${r.status}`}>{r.status}</span></td>
                   <td>
                     <div style={{ display: 'flex', gap: 6 }}>
-                      <button className="btn-icon" title="Edit" onClick={() => openEdit(room)}>
-                        <Pencil size={15} />
-                      </button>
-                      <button className="btn-icon" title="Delete" onClick={() => setConfirmDelete(room)}
-                        style={{ color: 'var(--rose)' }}>
-                        <Trash2 size={15} />
-                      </button>
+                      {isAdmin && (
+                        <div className="room-actions">
+                          <button className="icon-btn edit" onClick={() => openEdit(r)} aria-label="Edit room">
+                            <Pencil size={16} />
+                          </button>
+                          <button className="icon-btn delete" onClick={() => setConfirmDelete(r)} aria-label="Delete room">
+                            <Trash2 size={16} />
+                          </button>
+                        </div>
+                      )}
                     </div>
                   </td>
                 </tr>
@@ -285,29 +305,28 @@ export default function RoomManagement() {
       </Modal>
 
       {/* Delete Confirm */}
-      <Modal
-        open={!!confirmDelete}
-        onClose={() => setConfirmDelete(null)}
-        title="Delete Room"
-        size="sm"
-      >
-        <p style={{ color: 'var(--text-secondary)' }}>
-          Are you sure you want to delete <strong style={{ color: 'var(--text-primary)' }}>{confirmDelete?.name}</strong>? This action cannot be undone.
-        </p>
-        <div className="modal-footer">
-          <button className="btn btn-secondary" onClick={() => setConfirmDelete(null)}>Cancel</button>
-          <button
-            id="confirm-delete-btn"
-            className="btn btn-danger"
-            onClick={async () => {
-              await deleteRoom(confirmDelete.id);
-              setConfirmDelete(null);
-            }}
-          >
-            <Trash2 size={15} /> Delete
-          </button>
-        </div>
-      </Modal>
+      {confirmDelete && (
+        <Modal title="Confirm Delete" onClose={() => setConfirmDelete(null)}>
+          <p>Are you sure you want to delete room <b>{confirmDelete.name}</b>?</p>
+          <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end', marginTop: 20 }}>
+            <button className="btn btn-secondary" onClick={() => setConfirmDelete(null)}>Cancel</button>
+            <button className="btn btn-primary" style={{ background: 'var(--rose)', borderColor: 'var(--rose)' }}
+              onClick={async () => {
+                await deleteRoom(confirmDelete.id);
+                setConfirmDelete(null);
+              }}>
+              Delete Room
+            </button>
+          </div>
+        </Modal>
+      )}
+
+      {importModal && (
+        <ExcelImportModal 
+          mode="rooms" 
+          onClose={() => setImportModal(false)} 
+        />
+      )}
     </div>
   );
 }

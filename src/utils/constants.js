@@ -1,15 +1,19 @@
-export const FLOORS = [1, 2, 3, 4, 5, 6, 7, 8];
+export const FLOORS = [0, 1, 2, 3, 4, 5, 6, 7, 8];
 
 export const FLOOR_LABELS = {
-  1: 'Ground Floor',
-  2: '1st Floor',
-  3: '2nd Floor',
-  4: '3rd Floor',
-  5: '4th Floor',
-  6: '5th Floor',
-  7: '6th Floor',
-  8: '7th Floor',
+  0: 'Ground Floor',
+  1: '1st Floor',
+  2: '2nd Floor',
+  3: '3rd Floor',
+  4: '4th Floor',
+  5: '5th Floor',
+  6: '6th Floor (Faculty)',
+  7: '7th Floor',
+  8: '8th Floor (Seminar Hall)',
 };
+
+// Floors 0, 6, 7, 8 are under development
+export const UNDER_DEV_FLOORS = new Set([0, 6, 7, 8]);
 
 export const ROOM_TYPES = [
   { value: 'classroom',    label: 'Classroom',    color: 'var(--color-classroom)' },

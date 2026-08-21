@@ -1,4 +1,5 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
+import { supabase } from '../utils/supabaseClient.js';
 
 const AuthContext = createContext(null);
 
@@ -6,6 +7,7 @@ const AuthContext = createContext(null);
 export const ALLOWED_DOMAIN = 'mitwpu.edu.in';
 
 // Only these emails get full Admin access
+// eslint-disable-next-line react-refresh/only-export-components
 export const ADMIN_EMAILS = [
   'vedant.khedkar@mitwpu.edu.in',
   // add more admin emails here as needed
@@ -15,43 +17,51 @@ export const ADMIN_EMAILS = [
 //   'admin'  — full access (admin panel, live, faculty management, etc.)
 //   'viewer' — read-only (timetable, floor maps, free rooms view)
 
-// Hardcoded accounts — in production replace with a backend
-const USERS = [
-  {
-    id: 'usr-admin-001',
-    email: 'vedant.khedkar@mitwpu.edu.in',
-    password: 'vedant@9973',
-    name: 'Vedant Khedkar',
-    role: 'admin',
-    department: 'Administration',
-  },
-  {
-    id: 'usr-viewer-001',
-    email: 'faculty.test@mitwpu.edu.in',
-    password: 'test@1234',
-    name: 'Test User',
-    role: 'viewer',
-    department: 'Computer Science',
-  },
-];
-
 // ── Helpers ────────────────────────────────────────────────────────────
 function resolveRole(email) {
+  if (!email) return 'viewer';
   const lower = email.trim().toLowerCase();
   if (ADMIN_EMAILS.includes(lower)) return 'admin';
   return 'viewer';
 }
 
 export function AuthProvider({ children }) {
-  const [currentUser, setCurrentUser] = useState(() => {
-    try {
-      const s = localStorage.getItem('vyas_auth_user');
-      return s ? JSON.parse(s) : null;
-    } catch { return null; }
-  });
+  const [currentUser, setCurrentUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  // ── Login (existing users list) ────────────────────────────────────
-  const login = (email, password) => {
+  useEffect(() => {
+    // Check active sessions and sets the user
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session?.user) {
+        setCurrentUser({
+          id: session.user.id,
+          email: session.user.email,
+          role: resolveRole(session.user.email),
+          name: session.user.user_metadata?.name || 'User',
+        });
+      }
+      setLoading(false);
+    });
+
+    // Listen for changes on auth state (logged in, signed out, etc.)
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.user) {
+        setCurrentUser({
+          id: session.user.id,
+          email: session.user.email,
+          role: resolveRole(session.user.email),
+          name: session.user.user_metadata?.name || 'User',
+        });
+      } else {
+        setCurrentUser(null);
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  // ── Login ────────────────────────────────────────────────────────
+  const login = async (email, password) => {
     const trimmed = email.trim().toLowerCase();
     const domain  = trimmed.split('@')[1];
 
@@ -62,22 +72,20 @@ export function AuthProvider({ children }) {
       };
     }
 
-    const user = USERS.find(
-      u => u.email.toLowerCase() === trimmed && u.password === password
-    );
+    const { error } = await supabase.auth.signInWithPassword({
+      email: trimmed,
+      password,
+    });
 
-    if (!user) {
-      return { success: false, error: 'Invalid email or password. Please try again.' };
+    if (error) {
+      return { success: false, error: error.message };
     }
 
-    const { password: _pw, ...safe } = user;
-    setCurrentUser(safe);
-    localStorage.setItem('vyas_auth_user', JSON.stringify(safe));
     return { success: true };
   };
 
-  // ── Register (any @mitwpu.edu.in — gets viewer role) ──────────────
-  const register = (name, email, password) => {
+  // ── Register ─────────────────────────────────────────────────────
+  const register = async (name, email, password) => {
     const trimmed = email.trim().toLowerCase();
     const domain  = trimmed.split('@')[1];
 
@@ -95,25 +103,25 @@ export function AuthProvider({ children }) {
       return { success: false, error: 'Password must be at least 6 characters.' };
     }
 
-    // In production, this would call an API. Here we create a session user.
-    const role = resolveRole(trimmed);
-    const newUser = {
-      id: `usr-${Date.now()}`,
+    const { error } = await supabase.auth.signUp({
       email: trimmed,
-      name: name.trim(),
-      role,
-      department: '',
-    };
+      password,
+      options: {
+        data: {
+          name: name.trim(),
+        }
+      }
+    });
 
-    // Persist and auto-login
-    setCurrentUser(newUser);
-    localStorage.setItem('vyas_auth_user', JSON.stringify(newUser));
+    if (error) {
+      return { success: false, error: error.message };
+    }
+
     return { success: true };
   };
 
-  const logout = () => {
-    setCurrentUser(null);
-    localStorage.removeItem('vyas_auth_user');
+  const logout = async () => {
+    await supabase.auth.signOut();
   };
 
   const isAdmin  = currentUser?.role === 'admin';
@@ -123,11 +131,12 @@ export function AuthProvider({ children }) {
     <AuthContext.Provider value={{
       currentUser, isAdmin, isViewer, login, register, logout, ALLOWED_DOMAIN,
     }}>
-      {children}
+      {!loading && children}
     </AuthContext.Provider>
   );
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useAuth() {
   const ctx = useContext(AuthContext);
   if (!ctx) throw new Error('useAuth must be used inside AuthProvider');

@@ -1,5 +1,6 @@
-import { createContext, useContext, useReducer, useCallback } from 'react';
+import { createContext, useContext, useReducer, useCallback, useEffect } from 'react';
 import { api } from '../utils/api.js';
+import { supabase } from '../utils/supabaseClient.js';
 
 const AppContext = createContext(null);
 
@@ -51,11 +52,25 @@ export function AppProvider({ children }) {
       dispatch({ type: 'SET_ALLOTMENTS', payload: allotments });
     } catch (e) {
       dispatch({ type: 'SET_ERROR', payload: e.message });
-      toast('Failed to connect to server. Is JSON Server running?', 'error');
+      toast('Failed to connect to database.', 'error');
     } finally {
       dispatch({ type: 'SET_LOADING', payload: false });
     }
   }, [toast]);
+
+  useEffect(() => {
+    // Subscribe to all changes in the public schema
+    const channel = supabase.channel('schema-db-changes')
+      .on('postgres_changes', { event: '*', schema: 'public' }, (payload) => {
+        console.log('Real-time update received:', payload);
+        loadAll();
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [loadAll]);
 
   // ── Rooms ──
   const createRoom = useCallback(async (data) => {
@@ -138,6 +153,31 @@ export function AppProvider({ children }) {
     toast('Allotment removed.', 'info');
   }, [state.allotments, toast]);
 
+  // ── Bulk Operations ──
+  const bulkCreateRooms = useCallback(async (rooms) => {
+    const created = await api.rooms.bulkCreate(rooms);
+    dispatch({ type: 'SET_ROOMS', payload: [...state.rooms, ...created] });
+    toast(`${created.length} rooms imported successfully!`, 'success');
+  }, [state.rooms, toast]);
+
+  const bulkCreateFaculty = useCallback(async (faculties) => {
+    const created = await api.faculty.bulkCreate(faculties);
+    dispatch({ type: 'SET_FACULTY', payload: [...state.faculty, ...created] });
+    toast(`${created.length} faculty imported successfully!`, 'success');
+  }, [state.faculty, toast]);
+
+  const bulkCreateSubjects = useCallback(async (subs) => {
+    const created = await api.subjects.bulkCreate(subs);
+    dispatch({ type: 'SET_SUBJECTS', payload: [...state.subjects, ...created] });
+    toast(`${created.length} subjects imported successfully!`, 'success');
+  }, [state.subjects, toast]);
+
+  const bulkCreateAllotments = useCallback(async (allots) => {
+    const created = await api.allotments.bulkCreate(allots);
+    dispatch({ type: 'SET_ALLOTMENTS', payload: [...state.allotments, ...created] });
+    toast(`${created.length} allotments imported successfully!`, 'success');
+  }, [state.allotments, toast]);
+
   return (
     <AppContext.Provider value={{
       ...state,
@@ -147,12 +187,14 @@ export function AppProvider({ children }) {
       createFaculty, updateFaculty, deleteFaculty,
       createSubject, updateSubject, deleteSubject,
       createAllotment, updateAllotment, deleteAllotment,
+      bulkCreateRooms, bulkCreateFaculty, bulkCreateSubjects, bulkCreateAllotments
     }}>
       {children}
     </AppContext.Provider>
   );
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useApp() {
   const ctx = useContext(AppContext);
   if (!ctx) throw new Error('useApp must be used within AppProvider');

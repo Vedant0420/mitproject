@@ -1,105 +1,79 @@
-import { useParams, useNavigate, NavLink } from 'react-router-dom';
+import { useParams, NavLink } from 'react-router-dom';
 import { useApp } from '../context/AppContext.jsx';
 import { useState } from 'react';
-import { FLOORS, FLOOR_LABELS } from '../utils/constants.js';
+import { FLOORS, FLOOR_LABELS, UNDER_DEV_FLOORS } from '../utils/constants.js';
 import { formatTimeRange } from '../utils/helpers.js';
-import { X, CalendarCheck, MapPin } from 'lucide-react';
+import { X, CalendarCheck, Construction, HardHat } from 'lucide-react';
 import './FloorMap.css';
 
-// ── Floor 1 blueprint layout ─────────────────────────────────────────
-// Each entry: { id: roomName, x, y, w, h, type }
-// type: 'classroom' | 'lab' | 'washroom' | 'lift' | 'faculty'
-// Coordinates are percentages of building container (600×760)
+// ─────────────────────────────────────────────────────────────────────────────
+// STANDARD BLUEPRINT (Floors 1–5)
+// Based on actual Vyas Building floor map photo (Floor 4).
+// Same physical layout repeated each floor; room prefix = VY[floor]XX
+//
+// Canvas: 520 × 700
+// Clipped top-left corner (angled like the real building)
+// ─────────────────────────────────────────────────────────────────────────────
+function standardBlueprint(f) {
+  const p = f; // floor prefix digit
+  const r = (n) => `VY${p}${String(n).padStart(2, '0')}`;
 
-const FLOOR_BLUEPRINTS = {
-  1: {
-    w: 560, h: 760,
-    // Clip path for angled top-left corner
-    clip: 'polygon(80px 0, 100% 0, 100% 100%, 0 100%, 0 80px)',
+  return {
+    w: 520,
+    h: 700,
+    clip: 'polygon(70px 0, 100% 0, 100% 100%, 0 100%, 0 70px)',
     rooms: [
-      // ── Top section ─────────────────────────────────────────
-      { name: 'VY101', x: 90,  y: 30,  w: 120, h: 100, type: 'classroom' },
-      { name: 'VY124', x: 220, y: 30,  w: 110, h: 85,  type: 'classroom' },
-      { name: 'VY122', x: 340, y: 30,  w: 110, h: 100, type: 'lab' },
-      { name: 'VY113', x: 460, y: 30,  w: 90,  h: 140, type: 'classroom' },
-      { name: 'VY102', x: 90,  y: 140, w: 120, h: 90,  type: 'classroom' },
-      { name: 'VY124B',x: 220, y: 125, w: 110, h: 55,  type: 'classroom' },
+      // ── Left wing — large classrooms ──────────────────────────────
+      { name: r(1),  x: 18,  y: 18,  w: 132, h: 112, type: 'classroom' },
+      { name: r(2),  x: 18,  y: 142, w: 132, h: 100, type: 'classroom' },
+      { name: r(3),  x: 18,  y: 300, w: 132, h: 142, type: 'classroom' },
+      { name: r(4),  x: 18,  y: 452, w: 132, h: 132, type: 'classroom' },
 
-      // ── Right washrooms ──────────────────────────────────────
-      { name: 'VY118', x: 462, y: 180, w: 88, h: 28, type: 'washroom' },
-      { name: 'VY117', x: 462, y: 212, w: 88, h: 28, type: 'washroom' },
-      { name: 'VY116', x: 462, y: 244, w: 88, h: 28, type: 'washroom' },
-      { name: 'VY115', x: 462, y: 276, w: 88, h: 28, type: 'washroom' },
+      // ── Top center — classrooms ────────────────────────────────────
+      { name: r(24), x: 162, y: 18,  w: 112, h: 82,  type: 'classroom' },
+      { name: r(22), x: 284, y: 18,  w: 110, h: 100, type: 'lab'       },
 
-      // ── Middle section ───────────────────────────────────────
-      { name: 'VY103', x: 90,  y: 290, w: 130, h: 140, type: 'classroom' },
-      { name: 'VY126', x: 240, y: 290, w: 110, h: 65,  type: 'lab' },
-      { name: 'VY127', x: 240, y: 363, w: 110, h: 65,  type: 'lab' },
-      { name: 'VY114', x: 362, y: 290, w: 95,  h: 140, type: 'classroom' },
+      // ── Far right — washrooms (stacked) ───────────────────────────
+      { name: r(18), x: 404, y: 18,  w: 94,  h: 30,  type: 'washroom' },
+      { name: r(17), x: 404, y: 52,  w: 94,  h: 30,  type: 'washroom' },
+      { name: r(16), x: 404, y: 86,  w: 94,  h: 30,  type: 'washroom' },
+      { name: r(15), x: 404, y: 120, w: 94,  h: 30,  type: 'washroom' },
 
-      { name: 'VY104', x: 90,  y: 445, w: 130, h: 130, type: 'classroom' },
-      { name: 'VY128', x: 240, y: 438, w: 110, h: 65,  type: 'lab' },
-      { name: 'VY129', x: 240, y: 511, w: 110, h: 65,  type: 'lab' },
-      { name: 'VY113B',x: 362, y: 440, w: 95,  h: 140, type: 'classroom' },
+      // ── Right middle — classrooms ──────────────────────────────────
+      { name: r(14), x: 402, y: 158, w: 96,  h: 148, type: 'classroom' },
+      { name: r(13), x: 402, y: 315, w: 96,  h: 140, type: 'classroom' },
 
-      // ── Bottom washrooms ─────────────────────────────────────
-      { name: 'VY108', x: 365, y: 595, w: 93,  h: 28, type: 'washroom' },
-      { name: 'VY107', x: 365, y: 627, w: 93,  h: 28, type: 'washroom' },
+      // ── Center — labs (2 × 2 grid) ────────────────────────────────
+      { name: r(26), x: 162, y: 300, w: 110, h: 70,  type: 'lab' },
+      { name: r(27), x: 162, y: 375, w: 110, h: 70,  type: 'lab' },
+      { name: r(28), x: 162, y: 453, w: 110, h: 70,  type: 'lab' },
+      { name: r(29), x: 162, y: 527, w: 110, h: 70,  type: 'lab' },
+
+      // ── Bottom far right — washrooms ──────────────────────────────
+      { name: r(8),  x: 410, y: 618, w: 88,  h: 30,  type: 'washroom' },
+      { name: r(7),  x: 410, y: 652, w: 88,  h: 30,  type: 'washroom' },
     ],
+    // Staircase / lift markers (left corridor strip)
     lifts: [
-      { x: 52, y: 45 },
-      { x: 52, y: 80 },
-      { x: 52, y: 115 },
-      { x: 52, y: 320 },
-      { x: 52, y: 355 },
-      { x: 52, y: 620 },
-      { x: 52, y: 655 },
-      { x: 52, y: 690 },
+      { x: 18, y: 242 },
+      { x: 18, y: 271 },
+      { x: 18, y: 586 },
+      { x: 18, y: 615 },
     ],
-  },
-  2: {
-    w: 560, h: 720,
-    clip: null,
-    rooms: [
-      { name: 'VY201', x: 30,  y: 30,  w: 120, h: 100, type: 'classroom' },
-      { name: 'VY202', x: 165, y: 30,  w: 120, h: 100, type: 'classroom' },
-      { name: 'VY203', x: 300, y: 30,  w: 120, h: 100, type: 'classroom' },
-      { name: 'VY204', x: 435, y: 30,  w: 110, h: 100, type: 'classroom' },
-      { name: 'VY222', x: 30,  y: 180, w: 120, h: 100, type: 'lab' },
-      { name: 'VY224', x: 165, y: 180, w: 120, h: 100, type: 'classroom' },
-      { name: 'VY213', x: 300, y: 180, w: 120, h: 100, type: 'classroom' },
-      { name: 'VY214', x: 435, y: 180, w: 110, h: 100, type: 'classroom' },
-      { name: 'VY226', x: 30,  y: 330, w: 120, h: 90,  type: 'lab' },
-      { name: 'VY227', x: 165, y: 330, w: 120, h: 90,  type: 'lab' },
-      { name: 'VY228', x: 300, y: 330, w: 120, h: 90,  type: 'lab' },
-      { name: 'VY229', x: 435, y: 330, w: 110, h: 90,  type: 'lab' },
-    ],
-    lifts: [],
-  },
-};
-
-// Generate placeholder layout for floors without a custom blueprint
-function genericFloorLayout(floorNum) {
-  const prefix = `VY${floorNum}`;
-  const rooms = [];
-  let col = 0, row = 0;
-  const names = Array.from({ length: 12 }, (_, i) => `${prefix}0${i + 1}`);
-  names.forEach((name, i) => {
-    rooms.push({
-      name,
-      x: 30 + col * 145,
-      y: 30 + row * 130,
-      w: 130,
-      h: 110,
-      type: i % 4 === 2 ? 'lab' : 'classroom',
-    });
-    col++;
-    if (col > 3) { col = 0; row++; }
-  });
-  return { w: 620, h: row * 130 + 160, clip: null, rooms, lifts: [] };
+    // "You Are Here" entry marker
+    entry: { x: 155, y: 225, label: 'Entry / Lift' },
+  };
 }
 
-// ── Type color mapping ────────────────────────────────────────────────
+const FLOOR_BLUEPRINTS = {
+  1: standardBlueprint(1),
+  2: standardBlueprint(2),
+  3: standardBlueprint(3),
+  4: standardBlueprint(4),
+  5: standardBlueprint(5),
+};
+
+// ── Type color mapping ────────────────────────────────────────────────────────
 const TYPE_COLOR = {
   classroom: 'var(--fm-room-classroom)',
   lab:       'var(--fm-room-lab)',
@@ -108,14 +82,38 @@ const TYPE_COLOR = {
 };
 
 const LEGEND_ITEMS = [
-  { label: 'Lifts',          color: 'var(--fm-room-lift)',      cls: 'fm-legend-lift' },
-  { label: 'Classroom',      color: 'var(--fm-room-classroom)' },
-  { label: 'Lab',            color: 'var(--fm-room-lab)' },
-  { label: 'Washroom',       color: 'var(--fm-room-washroom)' },
-  { label: 'Faculty Rooms',  color: 'var(--fm-room-faculty)' },
+  { label: 'Classroom', color: 'var(--fm-room-classroom)' },
+  { label: 'Lab',       color: 'var(--fm-room-lab)' },
+  { label: 'Washroom',  color: 'var(--fm-room-washroom)' },
 ];
 
-// ── Room Panel ───────────────────────────────────────────────────────
+// ── Under Development screen ──────────────────────────────────────────────────
+function UnderDevelopment({ floor }) {
+  const label = FLOOR_LABELS[floor];
+  const desc = {
+    0: 'Ground floor map is being digitized. Check back soon.',
+    6: 'Faculty cabin layout will be available once finalized.',
+    7: 'Floor layout will be added once details are confirmed.',
+    8: 'Seminar hall layout is being prepared.',
+  }[floor] || 'This floor map is coming soon.';
+
+  return (
+    <div className="fm-under-dev">
+      <div className="fm-under-dev-icon">
+        <HardHat size={40} />
+      </div>
+      <h2>Under Development</h2>
+      <p className="fm-under-dev-floor">{label}</p>
+      <p className="fm-under-dev-desc">{desc}</p>
+      <div className="fm-under-dev-badge">
+        <Construction size={13} />
+        Map Coming Soon
+      </div>
+    </div>
+  );
+}
+
+// ── Room Panel ────────────────────────────────────────────────────────────────
 function RoomPanel({ room, allotments, subjects, faculty, onClose }) {
   if (!room) return null;
   const roomAllots = allotments.filter(a => a.roomId === room.id);
@@ -129,7 +127,7 @@ function RoomPanel({ room, allotments, subjects, faculty, onClose }) {
             {room.status}
           </span>
         </div>
-        <button className="btn-icon" onClick={onClose}><X size={17} /></button>
+        <button className="btn-icon" onClick={onClose} aria-label="Close panel"><X size={17} /></button>
       </div>
 
       <div className="fm-panel-body">
@@ -186,21 +184,19 @@ function RoomPanel({ room, allotments, subjects, faculty, onClose }) {
   );
 }
 
-// ── Main FloorMap ────────────────────────────────────────────────────
+// ── Main FloorMap ─────────────────────────────────────────────────────────────
 export default function FloorMap() {
   const { floor: floorParam } = useParams();
-  const floor = parseInt(floorParam) || 1;
+  const floor = parseInt(floorParam ?? '1');
   const { rooms, allotments, subjects, faculty } = useApp();
-  const navigate = useNavigate();
   const [selectedRoom, setSelectedRoom] = useState(null);
-  const [typeFilter, setTypeFilter] = useState('all');
+  const [typeFilter, setTypeFilter]     = useState('all');
 
+  const isUnderDev = UNDER_DEV_FLOORS.has(floor);
   const floorRooms = rooms.filter(r => r.floor === floor);
+  const blueprint  = FLOOR_BLUEPRINTS[floor];
 
-  // Get or generate blueprint
-  const blueprint = FLOOR_BLUEPRINTS[floor] || genericFloorLayout(floor);
-
-  // Build a map of room name → db room object
+  // Room name → db object
   const roomMap = {};
   floorRooms.forEach(r => { roomMap[r.name] = r; });
 
@@ -217,7 +213,10 @@ export default function FloorMap() {
       <div className="fm-header">
         <div className="page-header" style={{ marginBottom: 0 }}>
           <h1>Floor Map</h1>
-          <p>{FLOOR_LABELS[floor]} — {floorRooms.length} rooms</p>
+          <p>
+            {FLOOR_LABELS[floor]}
+            {!isUnderDev && ` — ${floorRooms.length} rooms`}
+          </p>
         </div>
 
         {/* Floor tabs */}
@@ -226,124 +225,143 @@ export default function FloorMap() {
             <NavLink
               key={f}
               to={`/floors/${f}`}
-              className={`fm-floor-tab${f === floor ? ' active' : ''}`}
+              className={`fm-floor-tab${f === floor ? ' active' : ''}${UNDER_DEV_FLOORS.has(f) ? ' dev' : ''}`}
               onClick={() => setSelectedRoom(null)}
             >
               {f}
+              {UNDER_DEV_FLOORS.has(f) && <span className="fm-tab-dev-dot" title="Under Development" />}
             </NavLink>
           ))}
         </div>
       </div>
 
-      {/* Type filter chips */}
-      <div className="fm-filters" style={{ marginBottom: 16 }}>
-        {[
-          { value: 'all',       label: 'All' },
-          { value: 'classroom', label: 'Classrooms' },
-          { value: 'lab',       label: 'Labs' },
-          { value: 'washroom',  label: 'Washrooms' },
-          { value: 'faculty',   label: 'Faculty' },
-        ].map(t => (
-          <button
-            key={t.value}
-            className={`fm-type-chip${typeFilter === t.value ? ' active' : ''}`}
-            onClick={() => setTypeFilter(t.value)}
-          >
-            {t.label}
-          </button>
-        ))}
-      </div>
-
-      {/* Main grid */}
-      <div className={`fm-content${selectedRoom ? ' has-panel' : ''}`}>
-        {/* Blueprint */}
-        <div className="fm-blueprint-wrap">
-          {/* Building shape */}
-          <div
-            className="fm-building"
-            style={{
-              width:  blueprint.w,
-              height: blueprint.h,
-              clipPath: blueprint.clip || undefined,
-              position: 'relative',
-              flexShrink: 0,
-            }}
-          >
-            {/* Lifts */}
-            {blueprint.lifts.map((l, i) => (
-              <div key={i} className="fm-lift" style={{ left: l.x, top: l.y }}>L</div>
+      {/* Under Development screen */}
+      {isUnderDev ? (
+        <UnderDevelopment floor={floor} />
+      ) : (
+        <>
+          {/* Type filter chips */}
+          <div className="fm-filters" style={{ marginBottom: 16 }}>
+            {[
+              { value: 'all',       label: 'All' },
+              { value: 'classroom', label: 'Classrooms' },
+              { value: 'lab',       label: 'Labs' },
+              { value: 'washroom',  label: 'Washrooms' },
+            ].map(t => (
+              <button
+                key={t.value}
+                className={`fm-type-chip${typeFilter === t.value ? ' active' : ''}`}
+                onClick={() => setTypeFilter(t.value)}
+              >
+                {t.label}
+              </button>
             ))}
-
-            {/* Rooms */}
-            {blueprint.rooms.map(r => {
-              const dbRoom = roomMap[r.name];
-              const isFiltered = typeFilter !== 'all' && r.type !== typeFilter;
-              const color = TYPE_COLOR[r.type] || TYPE_COLOR.classroom;
-              const status = dbRoom?.status || null;
-
-              return (
-                <div
-                  key={r.name}
-                  className={`fm-room${selectedRoom?.name === r.name ? ' selected' : ''}${r.w < 60 ? ' sm' : ''}`}
-                  style={{
-                    left:       r.x,
-                    top:        r.y,
-                    width:      r.w,
-                    height:     r.h,
-                    background: color,
-                    opacity:    isFiltered ? 0.2 : 1,
-                    pointerEvents: isFiltered ? 'none' : 'auto',
-                  }}
-                  onClick={() => handleRoomClick(r.name)}
-                  title={r.name}
-                >
-                  <div className="fm-room-name">{r.name}</div>
-                  {r.h > 50 && dbRoom && (
-                    <div className="fm-room-cap">{dbRoom.capacity}</div>
-                  )}
-                  {status && <div className={`fm-room-status ${status}`} />}
-                </div>
-              );
-            })}
           </div>
-        </div>
 
-        {/* Room detail panel */}
-        {selectedRoom && (
-          <RoomPanel
-            room={rooms.find(r => r.id === selectedRoom.id) || selectedRoom}
-            allotments={allotments}
-            subjects={subjects}
-            faculty={faculty}
-            onClose={() => setSelectedRoom(null)}
-          />
-        )}
-      </div>
+          {/* Main grid */}
+          <div className={`fm-content${selectedRoom ? ' has-panel' : ''}`}>
+            {/* Blueprint */}
+            <div className="fm-blueprint-wrap">
+              <div
+                className="fm-building"
+                style={{
+                  width:    blueprint.w,
+                  height:   blueprint.h,
+                  clipPath: blueprint.clip || undefined,
+                  position: 'relative',
+                  flexShrink: 0,
+                }}
+              >
+                {/* Corridor / entry marker */}
+                {blueprint.entry && (
+                  <div
+                    className="fm-entry-marker"
+                    style={{ left: blueprint.entry.x, top: blueprint.entry.y }}
+                  >
+                    <span className="fm-entry-dot" />
+                    <span className="fm-entry-label">{blueprint.entry.label}</span>
+                  </div>
+                )}
 
-      {/* Legend */}
-      <div className="fm-legend" style={{ marginTop: 20 }}>
-        {LEGEND_ITEMS.map(({ label, color, cls }) => (
-          <div key={label} className="fm-legend-item">
-            <div
-              className={`fm-legend-dot${cls ? ` ${cls}` : ''}`}
-              style={{ background: color }}
-            />
-            {label}
+                {/* Lift markers */}
+                {blueprint.lifts.map((l, i) => (
+                  <div key={i} className="fm-lift" style={{ left: l.x, top: l.y }}>L</div>
+                ))}
+
+                {/* Rooms */}
+                {blueprint.rooms.map(r => {
+                  const dbRoom   = roomMap[r.name];
+                  const isFiltered = typeFilter !== 'all' && r.type !== typeFilter;
+                  const color    = TYPE_COLOR[r.type] || TYPE_COLOR.classroom;
+                  const status   = dbRoom?.status || null;
+                  const isWashroom = r.type === 'washroom';
+
+                  return (
+                    <div
+                      key={r.name}
+                      className={`fm-room${selectedRoom?.name === r.name ? ' selected' : ''}${isWashroom ? ' washroom' : ''}`}
+                      style={{
+                        left:          r.x,
+                        top:           r.y,
+                        width:         r.w,
+                        height:        r.h,
+                        background:    color,
+                        opacity:       isFiltered ? 0.15 : 1,
+                        pointerEvents: isFiltered ? 'none' : (isWashroom ? 'none' : 'auto'),
+                        cursor:        isWashroom ? 'default' : 'pointer',
+                      }}
+                      onClick={() => !isWashroom && handleRoomClick(r.name)}
+                      title={r.name}
+                    >
+                      <div className="fm-room-name">{r.name}</div>
+                      {r.h > 60 && dbRoom && (
+                        <div className="fm-room-cap">{dbRoom.capacity}</div>
+                      )}
+                      {status && !isWashroom && (
+                        <div className={`fm-room-status ${status}`} />
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Room detail panel */}
+            {selectedRoom && (
+              <RoomPanel
+                room={rooms.find(r => r.id === selectedRoom.id) || selectedRoom}
+                allotments={allotments}
+                subjects={subjects}
+                faculty={faculty}
+                onClose={() => setSelectedRoom(null)}
+              />
+            )}
           </div>
-        ))}
-        <div className="fm-legend-item" style={{ marginLeft: 'auto' }}>
-          <div className="fm-legend-dot" style={{ background: 'var(--teal)', borderRadius: '50%' }} />
-          Available
-        </div>
-        <div className="fm-legend-item">
-          <div className="fm-legend-dot" style={{ background: 'var(--rose)', borderRadius: '50%' }} />
-          Occupied
-        </div>
-        <div className="fm-legend-item">
-          <div className="fm-legend-dot" style={{ background: 'var(--amber)', borderRadius: '50%' }} />
-          Maintenance
-        </div>
-      </div>
+
+          {/* Legend */}
+          <div className="fm-legend" style={{ marginTop: 20 }}>
+            {LEGEND_ITEMS.map(({ label, color }) => (
+              <div key={label} className="fm-legend-item">
+                <div className="fm-legend-dot" style={{ background: color }} />
+                {label}
+              </div>
+            ))}
+            <div className="fm-legend-sep" />
+            <div className="fm-legend-item">
+              <div className="fm-legend-dot" style={{ background: 'var(--teal)', borderRadius: '50%' }} />
+              Available
+            </div>
+            <div className="fm-legend-item">
+              <div className="fm-legend-dot" style={{ background: 'var(--rose)', borderRadius: '50%' }} />
+              Occupied
+            </div>
+            <div className="fm-legend-item">
+              <div className="fm-legend-dot" style={{ background: 'var(--amber)', borderRadius: '50%' }} />
+              Maintenance
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }
