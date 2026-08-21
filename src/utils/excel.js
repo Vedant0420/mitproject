@@ -1,4 +1,4 @@
-import * as XLSX from 'xlsx';
+import ExcelJS from 'exceljs';
 
 /**
  * Converts an array of objects to an Excel file and triggers a download.
@@ -6,21 +6,33 @@ import * as XLSX from 'xlsx';
  * @param {string} sheetName - The name of the sheet
  * @param {string} fileName - The name of the exported file (without .xlsx)
  */
-export function exportToExcel(data, sheetName = 'Sheet1', fileName = 'export') {
+export async function exportToExcel(data, sheetName = 'Sheet1', fileName = 'export') {
   if (!data || data.length === 0) {
     alert("No data available to export");
     return;
   }
 
-  // Create a new workbook
-  const wb = XLSX.utils.book_new();
+  const workbook = new ExcelJS.Workbook();
+  const worksheet = workbook.addWorksheet(sheetName);
+
+  // Get headers from first object
+  const headers = Object.keys(data[0]);
+  worksheet.columns = headers.map(h => ({ header: h, key: h }));
+
+  // Add rows
+  data.forEach(row => {
+    worksheet.addRow(row);
+  });
+
+  // Generate buffer
+  const buffer = await workbook.xlsx.writeBuffer();
   
-  // Convert JSON to worksheet
-  const ws = XLSX.utils.json_to_sheet(data);
-  
-  // Append worksheet to workbook
-  XLSX.utils.book_append_sheet(wb, ws, sheetName);
-  
-  // Write and trigger download
-  XLSX.writeFile(wb, `${fileName}.xlsx`);
+  // Create download link
+  const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${fileName}.xlsx`;
+  a.click();
+  window.URL.revokeObjectURL(url);
 }

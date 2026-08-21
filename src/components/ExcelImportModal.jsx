@@ -1,7 +1,8 @@
 import { useState, useRef } from 'react';
-import * as XLSX from 'xlsx';
+import ExcelJS from 'exceljs';
 import { X, Upload, FileType, CheckCircle2, AlertTriangle, ArrowRight } from 'lucide-react';
 import { useApp } from '../context/AppContext.jsx';
+import { ROOM_TYPES } from '../utils/constants.js';
 
 export default function ExcelImportModal({ mode = 'allotments', onClose }) {
   const { rooms, subjects, faculty, bulkCreateAllotments, bulkCreateRooms, bulkCreateFaculty, bulkCreateSubjects } = useApp();
@@ -20,24 +21,40 @@ export default function ExcelImportModal({ mode = 'allotments', onClose }) {
     }
   };
 
-  const parseFile = (file) => {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      try {
-        const data = e.target.result;
-        const workbook = XLSX.read(data, { type: 'binary' });
-        const sheetName = workbook.SheetNames[0];
-        const sheet = workbook.Sheets[sheetName];
-        const jsonData = XLSX.utils.sheet_to_json(sheet);
-        
-        setParsedData(jsonData);
-        validateData(jsonData);
-      } catch (err) {
-        console.error('Excel parse error:', err);
-        alert("Failed to parse Excel file. Please ensure it is a valid format.");
-      }
-    };
-    reader.readAsBinaryString(file);
+  const parseFile = async (file) => {
+    try {
+      const arrayBuffer = await file.arrayBuffer();
+      const workbook = new ExcelJS.Workbook();
+      await workbook.xlsx.load(arrayBuffer);
+      
+      const worksheet = workbook.worksheets[0];
+      const jsonData = [];
+      
+      if (!worksheet) throw new Error("No worksheets found");
+
+      // ExcelJS rows are 1-indexed. Row 1 is header.
+      const headers = [];
+      worksheet.getRow(1).eachCell((cell, colNumber) => {
+        headers[colNumber] = cell.value?.toString().trim();
+      });
+
+      worksheet.eachRow((row, rowNumber) => {
+        if (rowNumber === 1) return; // skip header
+        const rowData = {};
+        row.eachCell((cell, colNumber) => {
+          const header = headers[colNumber];
+          if (header) {
+            rowData[header] = cell.value;
+          }
+        });
+        jsonData.push(rowData);
+      });
+      
+      validateData(jsonData);
+    } catch (err) {
+      console.error('Excel parse error:', err);
+      alert("Failed to parse Excel file. Please ensure it is a valid format.");
+    }
   };
 
   const validateData = (data) => {
@@ -99,16 +116,22 @@ export default function ExcelImportModal({ mode = 'allotments', onClose }) {
         }
       } else if (mode === 'rooms') {
         const name = row['Name'] || row['Room Name'];
-        const type = row['Type'] || 'classroom';
+        const typeRaw = row['Type'] || 'classroom';
+        const type = String(typeRaw).toLowerCase().replace(' ', '_');
         const capacity = row['Capacity'] || 0;
         const floor = row['Floor'] || 1;
         
         if (!name) errors.push('Missing Name column');
         if (getMatch(rooms, 'name', name)) errors.push(`Room "${name}" already exists`);
         
+        const validTypes = ROOM_TYPES.map(rt => rt.value);
+        if (!validTypes.includes(type)) {
+          errors.push(`Invalid room type "${typeRaw}". Must be one of: ${validTypes.join(', ')}`);
+        }
+        
         parsed = { 
           name: String(name), 
-          type: String(type).toLowerCase().replace(' ', '_'), 
+          type, 
           capacity: parseInt(capacity) || 0, 
           floor: parseInt(floor) || 1, 
           status: 'available',
